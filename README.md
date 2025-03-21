@@ -5,5 +5,5 @@ A resilient modular SLAM framework named Ground-Fusion++, which integrates GNSS,
 **This paper is under review now. Full datasets and codes will be released once upon paper acceptance.**
 
 <div align=center>
-<img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/demo.gif" width="800px">
+<img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/demo.gif" width="500px">
 </div>
