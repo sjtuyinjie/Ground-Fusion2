@@ -11,6 +11,7 @@
 &emsp;
 🔥[[News]](TBD)
 
+Main contributors of this repo: Deteng Zhang, Junjie Zhang, Yan Sun, Yihong Tian, Jie Yin*
 
 ## 🎯 Introduction
 This is the official implementation of the IROS2025 paper entitled "Towards Robust Sensor-Fusion Ground SLAM: A Comprehensive Benchmark and A Resilient Framework". This paper presents a complete solution to robust SLAM for ground robots under degraded environments, including a comprehensive benchmark M3DGR([Link](https://github.com/sjtuyinjie/M3DGR)) and a resilient SLAM framework Ground-Fusion++(this repo).
