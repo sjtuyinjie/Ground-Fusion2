@@ -1,6 +1,6 @@
 # Ground-Fusion++: A Resilient Modular Multi-Sensor Fusion SLAM Framework
 
-💎 Corresponding Author: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/)  📝 [[Paper]](TBD) &emsp; ➡️ [[Dataset]](https://github.com/sjtuyinjie/M3DGR) &emsp; ⭐️ [[Presentation Video]](TBD) &emsp; 🔥 [[News]](TBD)
+💎 Corresponding Author: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/) &emsp; 📝 [[Paper]](TBD) &emsp; ➡️ [[Dataset]](https://github.com/sjtuyinjie/M3DGR) &emsp; ⭐️ [[Presentation Video]](TBD) &emsp; 🔥 [[News]](TBD)
 
 **Main contributors:** Deteng Zhang, Junjie Zhang, Yan Sun, Yihong Tian, Jie Yin*
 
