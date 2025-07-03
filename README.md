@@ -27,6 +27,8 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 
 ---
 
+> Our team is actively working on a next-generation version of Ground-Fusion++. Please follow our ongoing research!
+
 ## 📢 Notice
 
 **2025.06.16:** Our paper has been accepted to IROS 2025!  
