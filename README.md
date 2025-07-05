@@ -17,7 +17,7 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 - 📦 **[M3DGR Benchmark](https://github.com/sjtuyinjie/M3DGR)**: A comprehensive multi-sensor, multi-scenario SLAM benchmark for evaluating performance in challenging environments.  
 - 🚀 **Ground-Fusion++ (this repo)**: A resilient and modular SLAM framework integrating heterogeneous sensors for robust localization and high-quality mapping.
 
----
+
 
 ## 🔧 Key Features
 
@@ -25,7 +25,7 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 - **Robustness:** Combines state-of-the-art SLAM components to ensure accurate localization and mapping in large-scale, real-world scenarios.  
 - **Modularity:** Designed as an extensible baseline to support future research and practical deployments in complex environments.
 
----
+
 
 > Our team is actively working on a next-generation version of Ground-Fusion++. Please follow our ongoing research!
 
