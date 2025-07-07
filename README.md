@@ -6,6 +6,8 @@
 
 ---
 
+
+
 ## 🎯 Introduction
 
 This repository contains the official implementation of our **IROS 2025** paper:
@@ -17,6 +19,12 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 - 📦 **[M3DGR Benchmark](https://github.com/sjtuyinjie/M3DGR)**: A comprehensive multi-sensor, multi-scenario SLAM benchmark for evaluating performance in challenging environments.  
 - 🚀 **Ground-Fusion++ (this repo)**: A resilient and modular SLAM framework integrating heterogeneous sensors for robust localization and high-quality mapping.
 
+
+## TODO
+- [x] Release camera-ready version paper.
+- [x] Release Ground-Fusion++ code.
+- [x] Release M3DGR dataset with GT and calibration files.
+- [x] Release 40 SLAM codes adapted for M3DGR dataset.
 
 
 ## 🔧 Key Features
