@@ -1,6 +1,6 @@
 # [IROS2025] Ground-Fusion++: A Resilient Modular Multi-Sensor Fusion SLAM Framework
 
-💎 Corresponding Author: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/) &emsp; 📝 [[Paper]](TBD) &emsp; ➡️ [[Dataset]](https://github.com/sjtuyinjie/M3DGR) &emsp; ⭐️ [[Presentation Video]](TBD) &emsp; 🔥 [[News]](TBD)
+💎 Corresponding Author: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/) &emsp; 📝 [[Paper]](https://github.com/sjtuyinjie/M3DGR/blob/main/_IROS2025_GroundFusion2_M3DGR.pdf) &emsp; ➡️ [[Dataset]](https://github.com/sjtuyinjie/M3DGR) &emsp; ⭐️ [[Presentation Video]](TBD) &emsp; 🔥 [[News]](TBD)
 
 **Main contributors:** Deteng Zhang, Junjie Zhang, Yan Sun, Yihong Tian, Jie Yin*
 
@@ -21,10 +21,10 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 
 
 ## TODO
-- [x] Release camera-ready version paper.
-- [x] Release Ground-Fusion++ code.
-- [x] Release M3DGR dataset with GT and calibration files.
-- [x] Release 40 SLAM codes adapted for M3DGR dataset.
+- [x] Release camera-ready version paper.[paper](https://github.com/sjtuyinjie/M3DGR/blob/main/_IROS2025_GroundFusion2_M3DGR.pdf)
+- [ ] Release Ground-Fusion++ code.
+- [ ] Release M3DGR dataset with GT and calibration files.
+- [ ] Release 40 SLAM codes adapted for M3DGR dataset.
 
 
 ## 🔧 Key Features
