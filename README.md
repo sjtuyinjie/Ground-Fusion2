@@ -2,7 +2,7 @@
 
 💎 Corresponding Author: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/) &emsp; 📝 [[Paper]](https://github.com/sjtuyinjie/M3DGR/blob/main/_IROS2025_GroundFusion2_M3DGR.pdf) &emsp; ➡️ [[Dataset]](https://github.com/sjtuyinjie/M3DGR) &emsp; ⭐️ [[Presentation Video]](TBD) &emsp; 🔥 [[News]](TBD)
 
-**Main contributors:** Deteng Zhang, Junjie Zhang, Yan Sun, Yihong Tian, Jie Yin*
+**Main contributors:** Deteng Zhang, Junjie Zhang, Yan Sun, Yihong Tian, Jie Yin*(Project Lear)
 
 ---
 
