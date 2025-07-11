@@ -46,8 +46,44 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 
 ## 🚀 Run Examples
 ### M3DGR dataset
+Download [M3DGR](https://github.com/sjtuyinjie/M3DGR) dataset and give a star.
 
-### M3DGR dataset
+
+~~~
+# [launch] open a terminal and type:
+source devel/setup.bash
+roslaunch vins groundfusion.launch
+
+TBD
+
+
+~~~
+
+
+### M2DGR-Plus dataset
+Download [M2DGR-Plus](https://github.com/sjtuyinjie/M2DGR-plus) dataset and give a star.
+
+
+~~~
+# [launch] open a terminal and type:
+source devel/setup.bash
+roslaunch vins groundfusion.launch
+
+# [run localization] open another terminal:
+source devel/setup.bash
+rosrun vins vins_node src/Ground-Fusion/config/realsense/m2dgrp.yaml
+
+# [dense map]open third terminal:
+source devel/setup.bash
+rosrun dense_map dense_map_node src/Ground-Fusion/config/realsense/m2dgrp.yaml
+
+# [play rosbag]open forth terminal:
+rosbag play anamoly.bag
+
+
+~~~
+
+
 
 > ⚠️ **Known Issues**:  
 > - In most sequences, our provided configurations can directly reproduce the results reported in the paper. However, in certain cases, parameter fine-tuning may be required for optimal performance
