@@ -6,6 +6,14 @@
 
 ---
 
+## 📢 Notice
+
+**2025.06.16:** Our paper has been accepted to IROS 2025!  
+All datasets and code will be released soon — stay tuned!
+
+<div align="center">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/demo.gif" width="500px" alt="Ground-Fusion++ Demo">
+</div>
 
 
 ## 🎯 Introduction
@@ -32,16 +40,17 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 - **Multi-sensor Integration:** GNSS, RGB-D camera, IMU, wheel odometer, and LiDAR.  
 - **Robustness:** Combines state-of-the-art SLAM components to ensure accurate localization and mapping in large-scale, real-world scenarios.  
 - **Modularity:** Designed as an extensible baseline to support future research and practical deployments in complex environments.
+  
 
 
 
-> Our team is actively working on a next-generation version of Ground-Fusion++. Please follow our ongoing research!
+## 🚀 Run Examples
+### M3DGR dataset
 
-## 📢 Notice
+### M3DGR dataset
 
-**2025.06.16:** Our paper has been accepted to IROS 2025!  
-All datasets and code will be released soon — stay tuned!
+> ⚠️ **Known Issues**:  
+> - In most sequences, our provided configurations can directly reproduce the results reported in the paper. However, in certain cases, parameter fine-tuning may be required for optimal performance
+> - The mapping thread is relatively computationally intensive and may require a good machine to run smoothly.
+> - 💡Our team is actively working on a next-generation version of Ground-Fusion++. Stay tuned for updates and follow our latest research!!
 
-<div align="center">
-  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/demo.gif" width="500px" alt="Ground-Fusion++ Demo">
-</div>
