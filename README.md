@@ -91,3 +91,7 @@ rosbag play anamoly.bag
 > - The mapping thread is relatively computationally intensive and may require a good machine to run smoothly.
 > - 💡Our team is actively working on a next-generation version of Ground-Fusion++. Stay tuned for updates and follow our latest research!!
 
+
+## ⭐️ 5. Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=sjtuyinjie/Ground-Fusion2&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)
