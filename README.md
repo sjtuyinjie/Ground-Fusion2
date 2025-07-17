@@ -1,11 +1,11 @@
 # [IROS2025] Ground-Fusion++: A Resilient Modular Multi-Sensor Fusion SLAM Framework
 
-💎 Corresponding Author: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/) &emsp; 
+💎 Project Lead: [**Jie Yin 殷杰**](https://sjtuyinjie.github.io/) &emsp; 
 🌐 [[Website]](https://sjtuyinjie.github.io/M3DGR-website/) &emsp; 
 📝 [[Paper]](https://arxiv.org/abs/2507.08364) &emsp; 
 ➡️ [[Dataset]](https://github.com/sjtuyinjie/M3DGR) &emsp; 
 ⭐️ [[Pre Video]](TBD) &emsp; 
-🔥 [[News]](TBD)
+🔥 [[News]](https://mp.weixin.qq.com/s/2dVvuS3z6YDXbCG9-EOYuw)
 
 [![Author](https://img.shields.io/badge/Author-Jie%20Yin-blue)](https://sjtuyinjie.github.io/)
 [![Website](https://img.shields.io/badge/Website-M3DGR--web-green)](https://sjtuyinjie.github.io/M3DGR-website/)
