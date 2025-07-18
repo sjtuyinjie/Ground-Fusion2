@@ -16,7 +16,7 @@
 [![open issues](https://img.shields.io/github/issues-raw/sjtuyinjie/Ground-Fusion2)](https://github.com/sjtuyinjie/Ground-Fusion2/issues)
 [![closed issues](https://img.shields.io/github/issues-closed-raw/sjtuyinjie/Ground-Fusion2)](https://github.com/sjtuyinjie/Ground-Fusion2/issues)
 
-**Main contributors:** Deteng Zhang, Junjie Zhang, Yan Sun, Yihong Tian, Jie Yin*(Project Lead)
+**Core contributors:** Deteng Zhang, Junjie Zhang, Yihong Tian, Jie Yin*(Project Lead)
 
 ---
 
