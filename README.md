@@ -20,7 +20,7 @@
 
 ---
 
-## 📢 Notice
+## Notice 📢
 
 **2025.06.16:** Our paper has been accepted to IROS 2025!  
 All datasets and code will be released soon — stay tuned!
@@ -30,7 +30,7 @@ All datasets and code will be released soon — stay tuned!
 </div>
 
 
-## 🎯 Introduction
+## 1. Introduction 🎯
 
 This repository contains the official implementation of our **IROS 2025** paper:
 
@@ -44,7 +44,7 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 
 
 
-### 2.2 TODO
+### TODO
 - [x] Release camera-ready version of IROS2025 paper.[[paper](https://arxiv.org/abs/2507.08364)]
 - [x] Release 40 SLAM codes adapted for M3DGR dataset.[[codes](https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#6-supported-slam-algorithm-list)]
 - [ ] Release Ground-Fusion++ code, with examples on M3DGR on M2DGR-plus.
@@ -55,13 +55,13 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 > 🔍 For those interested in accessing the unreleased M3DGR sequences in advance, we recommend first thoroughly evaluating your methods on the already released sequences. After that, feel free to contact us at **zhangjunjie587@gmail.com** to request early access for research purposes.
 
 
-## 🔧 Key Features
+## 2. Key Features 🔧
 
 - **Multi-sensor Integration:** GNSS, RGB-D camera, IMU, wheel odometer, and LiDAR.  
 - **Robustness:** Combines state-of-the-art SLAM components to ensure accurate localization and mapping in large-scale, real-world scenarios.  
 - **Modularity:** Designed as an extensible baseline to support future research and practical deployments in complex environments.
   
-## Compile
+## 3. Compile
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/sjtuyinjie/Ground-Fusion2.git
@@ -70,8 +70,8 @@ catkin_make
 ```
 
 
-## 🚀 Run Examples
-### M3DGR dataset
+## 4. Run Examples 🚀
+### 4.1 M3DGR dataset
 Download [M3DGR](https://github.com/sjtuyinjie/M3DGR) dataset and give a star.
 
 
@@ -82,7 +82,7 @@ roslaunch groundfusion2 run_m3dgr.launch
 ~~~
 
 
-### M2DGR-Plus dataset
+### 4.2 M2DGR-Plus dataset
 Download [M2DGR-Plus](https://github.com/sjtuyinjie/M2DGR-plus) dataset and give a star.
 
 
@@ -92,7 +92,7 @@ source devel/setup.bash
 roslaunch groundfusion2 run_m2dgrp.launch
 ~~~
 
-### You can use rviz to view the trajectory switching
+### 4.3 You can use rviz to view the trajectory switching
 ~~~
 # [launch] open a terminal and type:
 source devel/setup.bash
