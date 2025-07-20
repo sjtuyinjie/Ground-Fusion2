@@ -21,13 +21,21 @@
 ---
 
 ## Notice 📢
-
+### News
 **2025.06.16:** Our paper has been accepted to IROS 2025!  
 All datasets and code will be released soon — stay tuned!
 
-<div align="center">
-  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh.gif" width="800px" alt="Ground-Fusion++ Demo">
-</div>
+
+
+### TODO
+- [x] Release camera-ready version of IROS2025 paper.[[paper](https://arxiv.org/abs/2507.08364)]
+- [x] Release 40 SLAM codes adapted for M3DGR dataset.[[codes](https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#6-supported-slam-algorithm-list)]
+- [x] Release Ground-Fusion++ code, with examples on M3DGR on M2DGR-plus.
+- [x] Release half of M3DGR sequences (all 10 evaluated representative sequences in the paper included) with GT and calibration files to make sure all results can be reproduced.
+- [ ] Release another half of M3DGR sequences upon our journal paper acception.
+- [ ] Release a much more competitive and robust SLAM system upon our journal paper acception.
+
+> 🔍 For those interested in accessing the unreleased M3DGR sequences in advance, we recommend first thoroughly evaluating your methods on the already released sequences. After that, feel free to contact us at **zhangjunjie587@gmail.com** to request early access for research purposes.
 
 
 ## 1. Introduction 🎯
@@ -44,15 +52,7 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 
 
 
-### TODO
-- [x] Release camera-ready version of IROS2025 paper.[[paper](https://arxiv.org/abs/2507.08364)]
-- [x] Release 40 SLAM codes adapted for M3DGR dataset.[[codes](https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#6-supported-slam-algorithm-list)]
-- [x] Release Ground-Fusion++ code, with examples on M3DGR on M2DGR-plus.
-- [x] Release half of M3DGR sequences (all 10 evaluated representative sequences in the paper included) with GT and calibration files to make sure all results can be reproduced.
-- [ ] Release another half of M3DGR sequences upon our journal paper acception.
-- [ ] Release a much more competitive and robust SLAM system upon our journal paper acception.
 
-> 🔍 For those interested in accessing the unreleased M3DGR sequences in advance, we recommend first thoroughly evaluating your methods on the already released sequences. After that, feel free to contact us at **zhangjunjie587@gmail.com** to request early access for research purposes.
 
 
 ## 2. Key Features 🔧
@@ -60,7 +60,11 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 - **Multi-sensor Integration:** GNSS, RGB-D camera, IMU, wheel odometer, and LiDAR.  
 - **Robustness:** Combines state-of-the-art SLAM components to ensure accurate localization and mapping in large-scale, real-world scenarios.  
 - **Modularity:** Designed as an extensible baseline to support future research and practical deployments in complex environments.
-  
+
+<div align="center">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh.gif" width="800px" alt="Ground-Fusion++ Demo">
+</div>
+
 ## 3. Compile
 ```
 cd ~/catkin_ws/src
