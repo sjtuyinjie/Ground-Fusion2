@@ -1,0 +1,37 @@
+<launch>
+  <!-- <node name="image_transport_1" pkg="image_transport" type="republish" args="compressed in:=/camera/color/image_raw raw out:=/camera/color/image_raw" /> -->
+  <node name="image_transport_2" pkg="image_transport" type="republish" args="compressedDepth in:=/camera/aligned_depth_to_color/image_raw raw out:=/camera/aligned_depth_to_color/image_raw" />
+  <node name="image_transport_3" pkg="image_transport" type="republish" args="raw in:=/camera/color/image_raw compressed out:=/camera/color/image_raw" />
+
+  <arg name="project" default="groundfusion2"/>
+  <!-- <param name="/use_sim_time" value="true" /> -->
+  <arg name="rviz" default="false" />
+  <arg name="config_file" default="$(find groundfusion2)/config/m2dgrp.yaml" />
+  <param name="config_file" value="$(arg config_file)" />
+
+  <!-- subscribe topic from bags -->
+  <!-- <node pkg="$(arg project)"  type="$(arg project)_eskf"  name="$(arg project)_eskf"  output="screen" launch-prefix="xterm -e gdb"/> -->
+  <node pkg="$(arg project)" type="$(arg project)_eskf" name="$(arg project)_eskf" output="screen" required="true" args="--config_yaml $(arg config_file)" />
+
+  <!-- rosbag_io  -->
+  <!-- <node pkg="$(arg project)"  type="$(arg project)_eskf_rosbag"  name="$(arg project)_eskf_rosbag"  output="screen" launch-prefix="xterm -e gdb"/> -->
+  <!-- <node pkg="$(arg project)" type="$(arg project)_eskf_rosbag" name="$(arg project)_eskf_rosbag" output="screen" required="true"/> -->
+
+  <node pkg="vins" type="vins_node" name="vins_node" output="screen" args="$(find groundfusion2)/../config/realsense/m2dgrp.yaml" />
+
+  <group if="$(arg rviz)">
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find groundfusion2)/launch/rviz.rviz" />
+  </group>
+
+  <include file="$(find im_mesh)/launch/mapping_m2dgrp.launch">
+    <arg name="rviz" value="false" /> 
+  </include>
+
+  <!-- <include file="$(find imu_transformer)/launch/ned_to_enu.launch" /> -->
+
+  <node name="rs_to_velodyne_node" pkg="rs_to_velodyne" type="rs_to_velodyne" args="m2dgrplus XYZIRT" output="screen" />
+
+<!-- <node pkg="tf" type="static_transform_publisher" name="word2map_tf"  args="0 0 0 0 0 0 /world /map 10" />
+<node pkg="tf" type="static_transform_publisher" name="bask_to_laser"  args="0 0 0 0 0 0 /base_link /rslidar 10" /> -->
+
+</launch>
