@@ -87,8 +87,6 @@ double              g_max_incidence_angle = 90;
 Common_tools::Timer g_cost_time_logger;
 
 Eigen::Matrix3d g_camera_K;
-// Eigen::Matrix3d R_pubw2c = Eigen::Matrix3d::Identity(); // 初始化为单位矩阵
-// Eigen::Vector3d t_pubw2c = Eigen::Vector3d::Zero();     // 初始化为零向量
 
 std::string data_path_file = std::string( Common_tools::get_home_folder() ).append( "/ImMesh_output/" );
 

@@ -7,8 +7,6 @@
 extern Global_map       g_map_rgb_pts_mesh;
 extern Triangle_manager g_triangles_manager;
 extern int              g_current_frame;
-// extern Eigen::Matrix3d R_pubw2c; // 世界坐标系到相机坐标系的旋转矩阵
-// extern Eigen::Vector3d t_pubw2c; // 世界坐标系到相机坐标系的平移向量
 
 extern double                       minimum_pts;
 extern double                       g_meshing_voxel_size;
@@ -71,26 +69,21 @@ void transformPointCloudToFusionFrame(
     Eigen::Matrix3d& R_imu_to_fusion,
     Eigen::Vector3d& t_imu_to_fusion)
 {
-    // 1. 计算 IMU 到世界系的变换
     Eigen::Matrix3d R_imu_to_world = orin_pose_q.toRotationMatrix();
     Eigen::Vector3d t_imu_to_world = orin_pose_t;
 
-    // 2. 计算融合轨迹到世界系的变换
     Eigen::Matrix3d R_fusion_to_world = pose_q.toRotationMatrix();
     Eigen::Vector3d t_fusion_to_world = pose_t;
 
-    // 3. 计算 IMU 到融合轨迹的变换
     // Eigen::Matrix3d R_imu_to_fusion = R_fusion_to_world.transpose() * R_imu_to_world;
     // Eigen::Vector3d t_imu_to_fusion = R_fusion_to_world.transpose() * (t_imu_to_world - t_fusion_to_world);
     
     R_imu_to_fusion = R_imu_to_world * R_fusion_to_world.transpose();
     t_imu_to_fusion = R_imu_to_fusion * t_imu_to_world - t_fusion_to_world;
 
-    // 调试输出
     // std::cout << "R_imu_to_fusion:\n" << R_imu_to_fusion << std::endl;
     // std::cout << "t_imu_to_fusion:\n" << t_imu_to_fusion.transpose() << std::endl;
 
-    // 4. 转换点云
     transformed_pts->clear();
     for (const auto& point : frame_pts->points) {
         Eigen::Vector3d p_imu(point.x, point.y, point.z);
@@ -163,16 +156,12 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
         if ( pt_ptr != nullptr )
             add = 0;
 
-        /// @bug 这里的 box_ptr也会出现 {use count 1811941585 weak count 32762} 这种情况 | 这里不是上锁导致的问题, 因为单线程运行这部分的程序, 程序一样出现问题！！！ 原因是是这里的hashmap_voxels中的数据出现了问题 !!!
-        /// @bug Hash表读取部分出现bug insert数据的时候不会出现问题,但是在get_data的时候获取到的shared_ptr出现问题 —— 根据不断的地注释发现是因为mesh重建中的一些部分代码影响了这里的数据
         RGB_voxel_ptr box_ptr;
         temp_box_ptr_ptr = g_map_rgb_pts_mesh.m_hashmap_voxels.get_data( box_x, box_y, box_z );
         if ( temp_box_ptr_ptr == nullptr )
         {
             box_ptr = std::make_shared< RGB_Voxel >( box_x, box_y, box_z );
-            // m_hashmap_voxels 该变量是用于存储所有的voxel数据的 | 这里是对voxel数据进行了上锁
             g_map_rgb_pts_mesh.m_hashmap_voxels.insert( box_x, box_y, box_z, box_ptr );
-            // 这个数据只被储存, 但是没有被后续使用
 //            g_map_rgb_pts_mesh.m_voxel_vec.push_back( box_ptr );
         }
         else
@@ -187,7 +176,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
             continue;
         }
 
-        /// TODO 这里可以考虑对 KDtree 进行保护
         acc++;
         KDtree_pt kdtree_pt( vec_3( frame_pts->points[ pt_idx ].x, frame_pts->points[ pt_idx ].y, frame_pts->points[ pt_idx ].z ), 0 );
         if ( g_map_rgb_pts_mesh.m_kdtree.Root_Node != nullptr )
@@ -202,7 +190,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
             }
         }
 
-        /// @attention 考虑保护m_rgb_pts_vec这个部分
         std::shared_ptr< RGB_pts > pt_rgb = std::make_shared< RGB_pts >();
 
         double x = frame_pts->points[pt_idx].x;
@@ -245,7 +232,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
 
     double time_a = tim_append.toc();
 
-    // note 后续将所有的转换关系都修改为 a2b 从b系到a系的转换关系
     Eigen::Matrix3d rot_i2w = orin_pose_q.toRotationMatrix();
     Eigen::Vector3d pos_i2w = orin_pose_t;
 
@@ -255,48 +241,25 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
     Eigen::Matrix3d R_c2i;
     Eigen::Vector3d t_c2i;
 
-    /*** m_extR: i2l || m_camera_ext_R: l2c ***/
     Eigen::Matrix3d R_w2c;
     Eigen::Vector3d t_w2c;
-
-    // R_i2c << 0.99957087 , 0.00215313 , 0.02921355,   //camera2imu
-    //         -0.00192891  ,0.99996848, -0.00770122,
-    //         -0.02922921 , 0.00764156  ,0.99954353;
-
-    // t_i2c << 0.03668114, -0.00477653, 0.0316039;
-
-    // 犹豫类似于单位阵, 所以这里先简单尝试(这里的R_w2c表示的是camera到world系的转换)
 
     R_c2i = extR;
     t_c2i = extT;
 
-    // std::cout << "R_i2c = \n" << R_i2c << std::endl;
-    // std::cout << "t_i2c = \n" << t_i2c.transpose() << std::endl;
-
     R_c2w = R_c2i * rot_i2w;
     t_c2w = rot_i2w * t_c2i + pos_i2w;
-
-    // R_w2c = R_c2w;
-    // t_w2c = t_c2w;
     
     R_w2c = R_c2w * R_imu_to_fusion;
     t_w2c = R_imu_to_fusion * t_c2w - t_imu_to_fusion;
-
-    // R_w2c = rot_w2i * extR * camera_ext_R;
-    // t_w2c = rot_w2i * extR * camera_ext_t + rot_w2i * extT + pos_w2i;
-
-    // R_pubw2c = R_w2c;
-    // t_pubw2c = t_w2c;
 
     std::shared_ptr<Image_frame> image_pose = std::make_shared<Image_frame>(cam_k);
     image_pose->set_pose(eigen_q(R_w2c), t_w2c);
     image_pose->m_img = img;
     image_pose->m_timestamp = ros::Time::now().toSec();
     image_pose->init_cubic_interpolation();
-    // 先注释这个部分避免其影响最终渲染的颜色
     image_pose->image_equalize();
 
-    /*** 渲染部分 ***/
     tim_render.tic();
     auto numbers_of_voxels = voxels_recent_visited.size();
     std::vector<shared_ptr<RGB_Voxel>> voxels_for_render;
@@ -307,8 +270,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
 
     image_pose->m_acc_render_count = 0;
     image_pose->m_acc_photometric_error = 0;
-    // 模仿immesh里面mesh重建的部分 —— 直接在这里写成tbb的加速 | 因为这个部分只会调用全局地图中的点云数据,所以上的是与之前相同的锁
-
     try
     {
         cv::parallel_for_(cv::Range(0, numbers_of_voxels), [&](const cv::Range &r) {
@@ -328,7 +289,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
                         continue;
 
                     pt_cam_norm = (pt_w - image_pose->m_pose_w2c_t).norm();
-                    // 在图像上获取点云的颜色信息 | 然后对这个voxel中的所有点云的颜色信息进行更新
                     rgb_color = image_pose->get_rgb(u, v, 0);
 
                     if (voxel_ptr->m_pts_in_grid[pt_idx]->update_rgb(
@@ -341,7 +301,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
             }
 
             g_mutex_append_map.unlock();
-            // 开启彩色点云的发布线程来获取color点云
         });
     }
     catch ( ... )
@@ -354,9 +313,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
     }
     double time_b = tim_render.toc();
 
-
-
-    /*** mesh重建 ***/
     std::atomic< int >    voxel_idx( 0 );
 
     std::mutex mtx_triangle_lock, mtx_single_thr;
@@ -381,7 +337,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
                 return;
             }
 
-            // note 手动补充: 对于点较少的voxel也不处理
             if (voxel->m_pts_in_grid.size() < 5) return;
 
             Common_tools::Timer tim_lock;
@@ -426,25 +381,10 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
             std::vector< long > add_triangle_idx = delaunay_triangulation( pts_in_voxels, voxel->m_long_axis, voxel->m_mid_axis,
                                                                                voxel->m_short_axis, convex_hull_index, inner_pts_index );
 
-            /// @attention 后续部分取消可以避免程序出现段错误导致崩溃(其原因很有可能是出现了shared_ptr之间互相指向导致的错误)
-//           for ( auto p : inner_pts_index )
-//           {
-//               if ( voxel->if_pts_belong_to_this_voxel( g_map_rgb_pts_mesh.m_rgb_pts_vec[ p ] ) )
-//               {
-//                   g_map_rgb_pts_mesh.m_rgb_pts_vec[ p ]->m_is_inner_pt = true;
-//                   g_map_rgb_pts_mesh.m_rgb_pts_vec[ p ]->m_parent_voxel = voxel;
-//               }
-//           }
-//
-//           for ( auto p : convex_hull_index )
-//           {
-//               g_map_rgb_pts_mesh.m_rgb_pts_vec[ p ]->m_is_inner_pt = false;
-//               g_map_rgb_pts_mesh.m_rgb_pts_vec[ p ]->m_parent_voxel = voxel;
-//           }
+        
             Triangle_set triangles_sets = g_triangles_manager.find_relative_triangulation_combination( relative_point_indices );
             Triangle_set triangles_to_remove, triangles_to_add, existing_triangle;
 
-            // 为了保证颜色信息可以被后续更新 | 这里将之前生成的三角形全部更新 - 实际思路肯定不是这样的(得确定哪些三角形的颜色信息是需要更新的)
             triangle_compare( triangles_sets, add_triangle_idx, triangles_to_remove, triangles_to_add, &existing_triangle );
             
             // Refine normal index
@@ -473,16 +413,6 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
         }
         return;
     }
-
-    // note 开启发布线程
-    // g_map_rgb_pts_mesh.m_last_updated_frame_idx++;
-    // if( g_pub_thr == nullptr  && flag == 0 )
-    // {
-    //     LOG(INFO) << "Prepare for RGB cloud";
-    //     // 对于10000个RGB点构建一个彩色点云的发布器，然后创建出多个发布器之后再发布数据(不过不理解的部分在与这里明明是进行数据的读取，为什么这里不需要上锁-也访问全局地图了)
-    //     g_pub_thr = std::make_unique<std::thread>(&Global_map::service_pub_rgb_maps, &g_map_rgb_pts_mesh);
-    //     flag = 1;           // 因为创建线程写在了while()循环中, 为了避免线程的重复创建，这里设置flag
-    // }
 
 
     double              mul_thr_cost_time = tim.toc( " ", 0 );
@@ -730,9 +660,8 @@ inline cv::Mat equalize_color_image_Ycrcb(cv::Mat &image)
 }
 
 void Voxel_mapping::lidar_callback( const sensor_msgs::PointCloud2::ConstPtr &msg ) {
-    std::lock_guard<std::mutex> lock(m_mutex_buffer); // 线程安全
+    std::lock_guard<std::mutex> lock(m_mutex_buffer); 
 
-    // 检查时间戳，防止数据回环
     double timestamp = msg->header.stamp.toSec();
     if (timestamp < m_last_timestamp_lidar)
     {
@@ -741,33 +670,19 @@ void Voxel_mapping::lidar_callback( const sensor_msgs::PointCloud2::ConstPtr &ms
         // m_time_buffer.clear();
     }
 
-    // 转换 ROS 点云消息 -> PCL 点云
     // PointCloudXYZI::Ptr cloud(new PointCloudXYZI());
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>);
     pcl::fromROSMsg(*msg, *cloud); // 直接转换，无需去畸变
 
-    // 存入缓冲区
     m_new_lidar_buffer.push_back(cloud);
     // m_time_buffer.push_back(timestamp);
     m_last_timestamp_lidar = timestamp;
 
-    // 限制缓冲区大小，防止内存过大
     const size_t MAX_BUFFER_SIZE = 100;
-    // if (m_lidar_buffer.size() > MAX_BUFFER_SIZE)
-    // {
-    //     m_lidar_buffer.pop_front();  // 删除最早的点云
-    //     m_time_buffer.pop_front();
-    // }
-
-    // 通知其他线程新数据可用
     m_sig_buffer.notify_all();
 }
 
 void Voxel_mapping::image_callback(const sensor_msgs::CompressedImageConstPtr &msg) {
-
-    // 如果当前无点云 等待点云与位姿部分获取到数据
-    // if (!m_new_lidar_buffer.empty() && !m_pose_buffer.empty())
-    //     return;
 
     m_mutex_buffer.lock();
     if(msg->header.stamp.toSec() < m_last_timestamp_img)
@@ -782,13 +697,12 @@ void Voxel_mapping::image_callback(const sensor_msgs::CompressedImageConstPtr &m
     m_img = cv_ptr_compressed->image;
     cv_ptr_compressed->image.release();
 
-    // 对RGB图像去除畸变
     cv::remap( m_img, m_img, m_ud_map1, m_ud_map2, cv::INTER_LINEAR );
     cv::cvtColor(m_img, m_img_gray, cv::COLOR_RGB2GRAY);
-    // 这里尝试不使用均衡化，但是最后生成的颜色还是有些失真
+
     image_equalize(m_img_gray, 3.0);
     m_img = equalize_color_image_Ycrcb(m_img);
-    // 设置数据值
+
     m_img_buffer.push_back(m_img);
     m_img_time_buffer.push_back(msg->header.stamp.toSec());
 
@@ -800,66 +714,27 @@ void Voxel_mapping::image_callback(const sensor_msgs::CompressedImageConstPtr &m
 }
 void Voxel_mapping::pose_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 {
-    std::lock_guard<std::mutex> lock(m_mutex_buffer); // 线程安全
+    std::lock_guard<std::mutex> lock(m_mutex_buffer); 
 
-    // 获取时间戳
     double timestamp = msg->header.stamp.toSec();
 
-    // 检测时间回环
-    // if (timestamp < m_last_timestamp_pose)
-    // {
-    //     ROS_ERROR("Pose loop back detected, clearing buffer.");
-    //     m_pose_buffer.clear();
-    //     // m_time_buffer.clear();
-    // }
-
-    // 存入缓冲区
     m_pose_buffer.push_back(*msg);
-    // m_time_buffer.push_back(timestamp);
-    // m_last_timestamp_pose = timestamp;
 
-    // // 限制缓冲区大小，防止内存过大
-    // const size_t MAX_BUFFER_SIZE = 100;
-    // if (m_pose_buffer.size() > MAX_BUFFER_SIZE)
-    // {
-    //     m_pose_buffer.pop_front();  // 删除最早的数据
-    //     // m_time_buffer.pop_front();
-    // }
-
-    // 通知其他线程新数据可用
     m_sig_buffer.notify_all();
 }
 
 void Voxel_mapping::orin_pose_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 {
-    std::lock_guard<std::mutex> lock(m_mutex_buffer); // 线程安全
+    std::lock_guard<std::mutex> lock(m_mutex_buffer); 
 
-    // 获取时间戳
-    // double timestamp = msg->header.stamp.toSec();
-
-    // 存入缓冲区
     m_orin_pose_buffer.push_back(*msg);
 
-    // 通知其他线程新数据可用
     m_sig_buffer.notify_all();
 }
 
-// 本函数用于实现读取一帧图像以及点云数据, 并且将其转换成为我们要的数据打包给mesh线程
 void Voxel_mapping::sendData() {
 
     // LOG(INFO) << "Sending data";
-    /* 适配 ground-fusion */
-    // 输入进入的图像实际上适用于全部地图构建的，但是其对应的点云以及点云的位姿实际上是已经用于将点云转换成为全局地图的 | 只有收获到雷达数据之后，图像数据才会开始进行渲染 (之前的图像数据全部被舍弃)
-    // ros::Subscriber sub_li = m_ros_node_ptr->subscribe( "/lidar_odometry/lidar/mapping/cloud_registered", 200000, &Voxel_mapping::lidar_callback, this );
-    // ros::Subscriber sub_im = m_ros_node_ptr->subscribe( "/camera/color/image_raw/compressed", 200000, &Voxel_mapping::image_callback, this );
-    // ros::Subscriber sub_pose = m_ros_node_ptr->subscribe("/lidar_odometry/lio_sam/mapping/current_pose", 200000, &Voxel_mapping::pose_callback, this);
-
-    /* 适配 voxel-map */
-    // ros::Subscriber sub_li = m_ros_node_ptr->subscribe( "/cloud_effected", 200000, &Voxel_mapping::lidar_callback, this );
-    // ros::Subscriber sub_im = m_ros_node_ptr->subscribe( "/camera/color/image_raw/compressed", 200000, &Voxel_mapping::image_callback, this );
-    // ros::Subscriber sub_pose = m_ros_node_ptr->subscribe("/pose_estimate", 200000, &Voxel_mapping::pose_callback, this);
-
-    /* 适配 ct-lio */
     ros::Subscriber sub_li = m_ros_node_ptr->subscribe( "/scan", 200000, &Voxel_mapping::lidar_callback, this );
     ros::Subscriber sub_im = m_ros_node_ptr->subscribe( "/img", 200000, &Voxel_mapping::image_callback, this );
     ros::Subscriber sub_pose = m_ros_node_ptr->subscribe("/laser_pose", 200000, &Voxel_mapping::pose_callback, this);
@@ -892,7 +767,6 @@ void Voxel_mapping::sendData() {
             Eigen::Quaterniond orin_rotation(orin_pose.pose.orientation.w, orin_pose.pose.orientation.x, orin_pose.pose.orientation.y, orin_pose.pose.orientation.z);
             m_orin_pose_buffer.pop_front();
 
-            // note 目前甚至于没有开启重建线程，程序自动崩溃
             if( !world_lidar_full->points.empty() && !img.empty() )
             {
                 g_mutex_all_data_package_lock.lock();
@@ -903,7 +777,6 @@ void Voxel_mapping::sendData() {
         }
         else
         {
-            // 没有数据接受线程等待一段时间
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
             // if (m_pose_buffer.empty()) {
             //     LOG(INFO) << "Lack of pose data";

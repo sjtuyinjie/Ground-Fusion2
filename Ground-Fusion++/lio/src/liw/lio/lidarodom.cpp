@@ -325,19 +325,22 @@ namespace zjloc
                static double z_axis_start = 0.0; 
                static bool z_axis_recorded = false; 
 
-               if (first_is_degenerate && is_degenerate) {
-
+               if (!odomQueue.empty()){
                     nav_msgs::Odometry externalOdom = getClosestOdom(meas.lidar_end_time_);
+     
                     tf::Quaternion orientation;
                     tf::quaternionMsgToTF(externalOdom.pose.pose.orientation, orientation);
                     Eigen::Quaterniond odom_quat(orientation.w(), orientation.x(), orientation.y(), orientation.z());
                     Eigen::Vector3d odom_trans(
-                         externalOdom.pose.pose.position.x,
-                         externalOdom.pose.pose.position.y,
-                         externalOdom.pose.pose.position.z
-                    );
-
+                              externalOdom.pose.pose.position.x,
+                              externalOdom.pose.pose.position.y,
+                              externalOdom.pose.pose.position.z
+                         );
+     
                     external_pose = SE3(Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()), R_align * odom_trans);
+               }
+
+               if (first_is_degenerate && is_degenerate) {
 
                     if (first_degenerate) {   
                          text = "Switch to VIO";
@@ -348,17 +351,6 @@ namespace zjloc
                     fused_pose =  external_pose * VIO_to_LIO;
                     pub_pose_to_ros(laser_topic, fused_pose, meas.lidar_end_time_);
                } else if (first_is_degenerate && !is_degenerate) {
-                    nav_msgs::Odometry externalOdom = getClosestOdom(meas.lidar_end_time_);
-                    tf::Quaternion orientation;
-                    tf::quaternionMsgToTF(externalOdom.pose.pose.orientation, orientation);
-                    Eigen::Quaterniond odom_quat(orientation.w(), orientation.x(), orientation.y(), orientation.z());
-                    Eigen::Vector3d odom_trans(
-                         externalOdom.pose.pose.position.x,
-                         externalOdom.pose.pose.position.y,
-                         externalOdom.pose.pose.position.z
-                    );
-
-                    external_pose = SE3(Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()), R_align * odom_trans);
 
                     if (first_exit_degenerate) {
                          
@@ -373,18 +365,6 @@ namespace zjloc
                }
 
                if (!first_is_degenerate && is_degenerate) {
-
-                    nav_msgs::Odometry externalOdom = getClosestOdom(meas.lidar_end_time_);
-                    tf::Quaternion orientation;
-                    tf::quaternionMsgToTF(externalOdom.pose.pose.orientation, orientation);
-                    Eigen::Quaterniond odom_quat(orientation.w(), orientation.x(), orientation.y(), orientation.z());
-                    Eigen::Vector3d odom_trans(
-                         externalOdom.pose.pose.position.x,
-                         externalOdom.pose.pose.position.y,
-                         externalOdom.pose.pose.position.z
-                    );
-
-                    external_pose = SE3(Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()), R_align * odom_trans);
 
 
                     if (first_degenerate) {
@@ -410,18 +390,6 @@ namespace zjloc
                                            external_pose.translation() + VIO_to_Fused.translation());
                          pub_pose_to_ros(laser_topic, fused_pose, meas.lidar_end_time_);
                } else if (!first_is_degenerate && !is_degenerate && has_entered_degenerate) {
-
-                    nav_msgs::Odometry externalOdom = getClosestOdom(meas.lidar_end_time_);
-                    tf::Quaternion orientation;
-                    tf::quaternionMsgToTF(externalOdom.pose.pose.orientation, orientation);
-                    Eigen::Quaterniond odom_quat(orientation.w(), orientation.x(), orientation.y(), orientation.z());
-                    Eigen::Vector3d odom_trans(
-                         externalOdom.pose.pose.position.x,
-                         externalOdom.pose.pose.position.y,
-                         externalOdom.pose.pose.position.z
-                    );
-
-                    external_pose = SE3(Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()), R_align * odom_trans);
 
                     if (first_exit_degenerate) {
                              text = "Switch to LIO";
@@ -849,91 +817,18 @@ namespace zjloc
           return rotation_vector.toRotationMatrix();
      }
 
-     int lidarodom::checkLocalizability(const std::vector<point3D>& points, const std::vector<Eigen::Vector3d>& normals)
-     {
-          const size_t N = points.size();
-          Eigen::Matrix<double,6,6> H = Eigen::Matrix<double,6,6>::Zero();
-          for (size_t i = 0; i < N; ++i)
-          {
-             const auto& p = points[i].point;
-             const auto& n = normals[i];
-             Eigen::Matrix<double,1,6> J;
-             J.block<1,3>(0,0) = n.transpose();
-             Eigen::Matrix3d skew;
-             skew <<  0,   -p.z(),  p.y(),
-                    p.z(),    0,   -p.x(),
-                   -p.y(),  p.x(),    0;
-             J.block<1,3>(0,3) = -n.transpose() * skew;
-             H += J.transpose() * J;
-          }
-          H += 1e-8 * Eigen::Matrix<double,6,6>::Identity();
-
-          Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double,6,6>> es(H);
-          Eigen::VectorXd evals = es.eigenvalues();
-          double mn = evals.minCoeff(), mx = evals.maxCoeff();
-
-          Eigen::VectorXd ne;
-          if (mx > mn) {
-               ne = (evals.array() - mn) / (mx - mn);
-          } else {
-               ne = Eigen::VectorXd::Zero(6);
-          }
-
-          int idx_min=0, idx_max=0;
-          for (int i = 1; i < 6; ++i)
-          {
-               if (ne[i] < ne[idx_min]) idx_min = i;
-               if (ne[i] > ne[idx_max]) idx_max = i;
-          }
-          double sum_mid = 0;
-          int cnt_mid = 0;
-          for (int i = 0; i < 6; ++i)
-          {
-               if (i!=idx_min && i!=idx_max)
-               {
-                    sum_mid += ne[i];
-                    ++cnt_mid;
-               }
-          }
-          double final_threshold = (cnt_mid>0 ? sum_mid / cnt_mid : 0.0);
-
-          const double T = 0.10;
-          if (final_threshold < T)
-          {
-               low_cnt_++;
-               high_cnt_ = 0;
-          }
-          else
-          {
-               high_cnt_++;
-               low_cnt_ = 0;
-          }
-          static int change_num = 0;
-          if (state_degeneracy == 0 && low_cnt_ >= 5)
-          {
-               state_degeneracy = 1;
-               low_cnt_ = 0;
-               high_cnt_ = 0;
-               change_num++;
-          }
-          else if (state_degeneracy == 1 && high_cnt_ >= 5)
-          {
-               state_degeneracy = 0;
-               low_cnt_ = 0;
-               high_cnt_ = 0;
-               change_num++;
-          }
-
-          // std::cout << "Final threshold: " << final_threshold << " | state_degeneracy: " << state_degeneracy << " | change_num: " << change_num << std::endl;
-          return state_degeneracy;
-     }
-
      double lidarodom::checkLocalizability(std::vector<Eigen::Vector3d> planeNormals)
      {
-          //   使用参与计算的法向量分布，进行退化检测，若全是平面场景，则z轴的奇异值会特别小；一般使用小于3/4即可
+          static bool permanently_degenerate = false; 
+
+          if (permanently_degenerate)
+          {
+             return 1;
+          }
+          
           Eigen::MatrixXd mat;
-          static int stable_degenerate_count = 0;       // 连续满足退化条件的计数器
-          static int stable_exit_degenerate_count = 0; // 连续满足退出退化条件的计数器
+          static int stable_degenerate_count = 0;
+          static int stable_exit_degenerate_count = 0; 
           
           if (planeNormals.size() > 10)
           {
@@ -994,6 +889,7 @@ namespace zjloc
           else
           {
                std::cout << ANSI_COLOR_RED << "Too few normal vector received -> " << planeNormals.size() << ANSI_COLOR_RESET << std::endl;
+               permanently_degenerate = true;
                return 1;
           }
 
