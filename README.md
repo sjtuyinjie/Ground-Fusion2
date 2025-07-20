@@ -61,7 +61,13 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 - **Robustness:** Combines state-of-the-art SLAM components to ensure accurate localization and mapping in large-scale, real-world scenarios.  
 - **Modularity:** Designed as an extensible baseline to support future research and practical deployments in complex environments.
   
-
+## Compile
+```
+cd ~/catkin_ws/src
+git clone https://github.com/sjtuyinjie/groundfusion2.git
+cd ../..
+catkin_make
+```
 
 
 ## 🚀 Run Examples
@@ -72,11 +78,7 @@ Download [M3DGR](https://github.com/sjtuyinjie/M3DGR) dataset and give a star.
 ~~~
 # [launch] open a terminal and type:
 source devel/setup.bash
-roslaunch vins groundfusion.launch
-
-TBD
-
-
+roslaunch groundfusion2 run_m3dgr.launch
 ~~~
 
 
@@ -87,20 +89,14 @@ Download [M2DGR-Plus](https://github.com/sjtuyinjie/M2DGR-plus) dataset and give
 ~~~
 # [launch] open a terminal and type:
 source devel/setup.bash
-roslaunch vins groundfusion.launch
+roslaunch groundfusion2 run_m2dgrp.launch
+~~~
 
-# [run localization] open another terminal:
+### You can use rviz to view the trajectory switching
+~~~
+# [launch] open a terminal and type:
 source devel/setup.bash
-rosrun vins vins_node src/Ground-Fusion/config/realsense/m2dgrp.yaml
-
-# [dense map]open third terminal:
-source devel/setup.bash
-rosrun dense_map dense_map_node src/Ground-Fusion/config/realsense/m2dgrp.yaml
-
-# [play rosbag]open forth terminal:
-rosbag play anamoly.bag
-
-
+rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 ~~~
 
 
