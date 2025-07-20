@@ -102,6 +102,7 @@ roslaunch groundfusion2 run_m2dgrp.launch
   <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="600px" alt="Ground-Fusion++ Demo">
 </div>
 The Blue one is the Ground-Fusion2 path, the green one is the LIO path, and the red one is the VIO path.
+
 ~~~
 # [launch] open a terminal and type:
 source devel/setup.bash
