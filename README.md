@@ -26,7 +26,7 @@
 All datasets and code will be released soon — stay tuned!
 
 <div align="center">
-  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/demo.gif" width="500px" alt="Ground-Fusion++ Demo">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh.gif" width="500px" alt="Ground-Fusion++ Demo">
 </div>
 
 
