@@ -97,6 +97,9 @@ roslaunch groundfusion2 run_m2dgrp.launch
 ~~~
 
 ### 4.3 You can use rviz to view the trajectory switching
+<div align="center">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="800px" alt="Ground-Fusion++ Demo">
+</div>
 ~~~
 # [launch] open a terminal and type:
 source devel/setup.bash
