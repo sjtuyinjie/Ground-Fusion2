@@ -64,7 +64,7 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 ## Compile
 ```
 cd ~/catkin_ws/src
-git clone https://github.com/sjtuyinjie/groundfusion2.git
+git clone https://github.com/sjtuyinjie/Ground-Fusion2.git
 cd ../..
 catkin_make
 ```
