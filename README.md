@@ -73,6 +73,7 @@ cd ../..
 catkin_make
 ```
 
+or refer to [readme](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md) for docker suppoert.
 
 ## 4. Run Examples 🚀
 ### 4.1 M3DGR dataset
