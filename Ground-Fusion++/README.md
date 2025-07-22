@@ -1,30 +1,4 @@
-# Ground-Fusion: A Low-cost Ground SLAM System Robust to Corner Cases (ICRA2024)
-## Project Author: [Jie Yin](https://github.com/sjtuyinjie?tab=repositories) at (1195391308@qq.com)
 
-## news
-
-2024.3.26 I have already release the Ground-fusion codes (Ubuntu 18.04 version).
-
-2024.3.25 I have already release the Ground-fusion codes (Ubuntu 20.04 version).
-
-2024.1.29 Accepted by ICRA2024. I have already released the datasets, and will release the code soon.
-
-   
-
-## Introduction
-
-We introduce Ground-Fusion, a low-cost sensor fusion simultaneous localization and mapping (SLAM) system for ground vehicles. Our system features efficient initialization, effective sensor anomaly detection and handling, real-time dense color mapping, and robust localization in diverse environments. We tightly integrate RGB-D images, inertial measurements, wheel odometer and GNSS signals within a factor graph to achieve accurate and reliable localization both indoors and outdoors. To ensure successful initialization, we propose an efficient strategy that comprises three different methods: stationary, visual, and dynamic, tailored to handle diverse cases. Furthermore, we develop mechanisms to detect sensor anomalies and degradation, handling them adeptly to maintain system accuracy. 
-
-The preprint version of paper is [arxiv](http://arxiv.org/abs/2402.14308).
-The dataset is at [https://github.com/SJTU-ViSYS/M2DGR-plus](https://github.com/SJTU-ViSYS/M2DGR-plus) and [https://github.com/SJTU-ViSYS/M2DGR](https://github.com/SJTU-ViSYS/M2DGR).
-
-
-<div align=center>
-<img src="./fig/challenges.jpg" width="300px">
-
-</div>
-<p align="center">Figure 1. We categorize corner cases into three types: visual,
-wheel, and GNSS challenges.</p>
 
 ## 1. Prerequisites and Installation
 ### 1.1 Ubuntu and ROS
