@@ -58,7 +58,7 @@ sudo systemctl restart docker
    	├── livox_ros_driver
    └── figure/
    ```
-
+- 其中第三方库可以下载 [thirdparty.zip](https://drive.google.com/file/d/1umjPqhYcBjMMFPogh5NlPa7JLTkwftNW/view?usp=drive_link)
 2. **提前拉取 ROS 镜像：**
 
    为加快后续构建速度，建议先将所需的基础镜像拉取到本地：
