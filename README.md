@@ -84,6 +84,7 @@ Download [M3DGR](https://github.com/sjtuyinjie/M3DGR) dataset and give a star.
 # [launch] open a terminal and type:
 source devel/setup.bash
 roslaunch groundfusion2 run_m3dgr.launch
+(roslaunch groundfusion2 run_m3dgr_avia.launch # Use AVIA)
 ~~~
 
 
@@ -125,7 +126,7 @@ If you want to see the switching situation or the mesh quality is poor, you can 
 </table>
 </div>
 
-  The Blue one is the Ground-Fusion++ path, the green one is the LIO path, and the red one is the VIO path. (*: this sequence from TABLE VIII of the [paper](https://arxiv.org/abs/2507.08364) )
+The Blue one is the Ground-Fusion++ path, the green one is the LIO path, and the red one is the VIO path. (* : this sequence from TABLE VIII of the [paper](https://arxiv.org/abs/2507.08364) )
 
 ~~~
 # [launch] open a terminal and type:
