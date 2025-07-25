@@ -105,23 +105,27 @@ If you want to see the switching situation or the mesh quality is poor, you can 
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="350px" height="270px">
+      <div>Corridor01* sequence of M3DGR, MID360</div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="350px" height="220px">
+      <div>Dynamic01 sequence of M3DGR, AVIA</div>
     </td>
   </tr>
   <tr>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path4.gif" width="350px" height="270px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path5.gif" width="350px" height="220px">
+      <div>Elevator01 sequence of M3DGR, MID360</div>
     </td>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path5.gif" width="350px" height="220px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path4.gif" width="350px" height="220px">
+      <div>Elevator01 sequence of M3DGR, AVIA</div>
     </td>
   </tr>
 </table>
 </div>
 
-The Blue one is the Ground-Fusion++ path, the green one is the LIO path, and the red one is the VIO path.
+The Blue one is the Ground-Fusion++ path, the green one is the LIO path, and the red one is the VIO path. (*: this sequence from TABLE VIII of the [paper](https://arxiv.org/abs/2507.08364) )
 
 ~~~
 # [launch] open a terminal and type:
