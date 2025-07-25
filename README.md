@@ -138,7 +138,7 @@ If you want to see the switching situation or the mesh quality is poor, you can 
 </table>
 </div>
 
-The **🔵blue** one is the Ground-Fusion++ path, the **🟢green** one is the LIO path, and the **🔴red** one is the VIO path. (* : this sequence from TABLE VIII of the [paper](https://arxiv.org/abs/2507.08364) )
+The **🔵blue** one is the Ground-Fusion++ path, the **🟢green** one is the LIO path, and the **🔴red** one is the VIO path (* : this sequence from TABLE VIII of the [paper](https://arxiv.org/abs/2507.08364) ).
 
 ~~~
 # [launch] open a terminal and type:
