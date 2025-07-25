@@ -94,7 +94,7 @@ roslaunch groundfusion2 run_m3dgr.launch
       <div>Dark01 sequence of M3DGR, AVIA</div>
     </td>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh4.gif" width="350px" height="220px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh4.gif" width="380px" height="270px">
       <div>Z-Rough-Road01 sequence of M3DGR, AVIA</div>
     </td>
 </table>
