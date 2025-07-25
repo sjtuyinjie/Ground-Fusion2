@@ -86,7 +86,19 @@ source devel/setup.bash
 roslaunch groundfusion2 run_m3dgr.launch
 (roslaunch groundfusion2 run_m3dgr_avia.launch # Use AVIA)
 ~~~
-
+<div align=center>
+<table>
+  <tr>
+    <td align="center" width="400px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh2.gif" width="350px" height="270px">
+      <div>Corridor01* sequence of M3DGR, AVIA</div>
+    </td>
+    <td align="center" width="400px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh3.gif" width="350px" height="220px">
+      <div>Dark01 sequence of M3DGR, AVIA</div>
+    </td>
+</table>
+</div>
 
 ### 4.2 M2DGR-Plus dataset
 Download [M2DGR-Plus](https://github.com/sjtuyinjie/M2DGR-plus) dataset and give a star.
