@@ -104,10 +104,10 @@ If you want to see the switching situation or the mesh quality is poor, you can 
 <table>
   <tr>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="250px" height="200px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="350px" height="270px">
     </td>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="250px" height="130px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="350px" height="220px">
     </td>
   </tr>
 </table>
