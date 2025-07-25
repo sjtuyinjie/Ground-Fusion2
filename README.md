@@ -100,8 +100,8 @@ roslaunch groundfusion2 run_m2dgrp.launch
 ### 4.3 You can use rviz to view the trajectory switching
 If you want to see the switching situation or the mesh quality is poor, you can run the following command to check which subsystem has the problem. Especially when you use AVIA lidar indoors, this often happens.
 <div align="center">
-  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="600px" alt="Ground-Fusion++ pathdemo1">
-  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="600px" alt="Ground-Fusion++ pathdemo2">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="300px" alt="Ground-Fusion++ pathdemo1">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="300px" alt="Ground-Fusion++ pathdemo2">
 </div>
 The Blue one is the Ground-Fusion2 path, the green one is the LIO path, and the red one is the VIO path.
 
