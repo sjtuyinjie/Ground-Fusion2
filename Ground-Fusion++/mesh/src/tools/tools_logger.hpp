@@ -89,17 +89,6 @@ Dr. Fu Zhang < fuzhang@hku.hk >.
 #define printf_line std::cout << __FILE__ << " " << __LINE__ << std::endl;
 #endif
 #define printf_program( a )                                                                                                                                                                            \
-    std::cout << ANSI_COLOR_YELLOW_BOLD;                                                                                                                                                               \
-    std::cout << "=============================================================" << std::endl;                                                                                                         \
-    std::cout << "App name   : " << ANSI_COLOR_WHITE_BOLD << a << ANSI_COLOR_YELLOW_BOLD << std::endl;                                                                                                 \
-    std::cout << "Build date : " << __DATE__ << "  " << __TIME__ << std::endl;                                                                                                                         \
-    std::cout << "CPU infos  : " << Common_tools::get_cpu_info() << std::endl;                                                                                                                         \
-    std::cout << "RAM infos  : " << Common_tools::get_RAM_info() << std::endl;                                                                                                                         \
-    std::cout << "OS  infos  : " << Common_tools::get_OS_info() << std::endl;                                                                                                                          \
-    std::cout << "Home dir   : " << Common_tools::get_home_folder() << std::endl;                                                                                                                      \
-    std::cout << "Current dir: " << Common_tools::get_current_folder() << std::endl;                                                                                                                   \
-    std::cout << "Date mow   : " << Common_tools::get_current_date_time_str() << std::endl;                                                                                                            \
-    std::cout << "=============================================================" << ANSI_COLOR_RESET << std::endl;
 
 #define LOG_FILE_LINE( x )                                                                                                                                                                             \
     *( ( x ).get_ostream() ) << __FILE__ << "   " << __LINE__ << endl;                                                                                                                                 \
@@ -158,25 +147,7 @@ inline void printf_software_version()
 {
 
     scope_color( ANSI_COLOR_GREEN_BOLD );
-    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    std::cout << "Here is the your software environments: " << std::endl;
 // #ifdef __GNUC__ &&__GNUC_MINOR__ &&__GNUC_PATCHLEVEL__
-#ifdef __GNUC_PATCHLEVEL__
-    std::cout << "GCC version          : " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << endl;
-#endif
-#ifdef BOOST_VERSION // Has Boost
-    std::cout << "Boost version        : " << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 << "." << BOOST_VERSION % 100 << std::endl;
-#endif
-
-// #ifdef EIGEN_WORLD_VERSION &&EIGEN_MAJOR_VERSION &&EIGEN_MINOR_VERSION // Has Eigen
-#ifdef EIGEN_MINOR_VERSION // Has Eigen
-    std::cout << "Eigen version        : " << EIGEN_WORLD_VERSION << "." << EIGEN_MAJOR_VERSION << "." << EIGEN_MINOR_VERSION << std::endl;
-#endif
-
-// #ifdef CV_MAJOR_VERSION &&CV_MINOR_VERSION &&CV_VERSION_REVISION // Has openCV
-#ifdef CV_VERSION_REVISION // Has openCV
-    std::cout << "OpenCV version       : " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION << std::endl;
-#endif
 
 // #ifdef CERES_VERSION_MAJOR &&CERES_VERSION_MINOR &&CERES_VERSION_PATCH // Has Ceres-solver
 #ifdef CERES_VERSION_PATCH // Has Ceres-solver
@@ -190,7 +161,7 @@ inline void printf_software_version()
 #ifdef CGAL_VERSION_STR // didn't take effect...., any bugs here?
     std::cout << "CGAL version         : " << CGAL_VERSION_STR << std::endl;
 #endif
-    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+
 }
 
 template < typename T >

@@ -3,7 +3,7 @@
 
 namespace zjloc
 {
-#define USE_ANALYTICAL_DERIVATE 1 //    是否使用解析求导
+#define USE_ANALYTICAL_DERIVATE 1
 
      lidarodom::lidarodom(/* args */)
      {
@@ -82,14 +82,14 @@ namespace zjloc
      {
           config_yaml_ = config_yaml;
           StaticIMUInit::Options imu_init_options;
-          imu_init_options.use_speed_for_static_checking_ = false; // 本节数据不需要轮速计
+          imu_init_options.use_speed_for_static_checking_ = false;
           imu_init_ = StaticIMUInit(imu_init_options);
 
           text = "No Degeneracy";
 
           auto yaml = YAML::LoadFile(config_yaml_);
           delay_time_ = yaml["delay_time"].as<double>();
-          // lidar和IMU外参
+
           std::vector<double> ext_t = yaml["mapping"]["extrinsic_T"].as<std::vector<double>>();
           std::vector<double> ext_r = yaml["mapping"]["extrinsic_R"].as<std::vector<double>>();
           Vec3d lidar_T_wrt_IMU = math::VecFromArray(ext_t);
@@ -198,11 +198,6 @@ namespace zjloc
        odomQueue.push_back(*odometryMsg);
 
      //  std::cout << "\033[2K\rCurrent odomQueue size: " << odomQueue.size() << std::flush;
-
-     //   const size_t maxQueueSize = 10000; // 设置最大队列大小
-     //   if (odomQueue.size() > maxQueueSize) {
-     //       odomQueue.pop_front(); // 移除最早的数据
-     //      }
      }
 
      void lidarodom::pushData(cv::Mat img, double timestamp)
@@ -262,7 +257,6 @@ namespace zjloc
 
      void lidarodom::ProcessMeasurements(MeasureGroup &meas)
      {
-          // std::cout << "开始测试"<< std::endl;
           measures_ = meas;
 
           if (imu_need_init_)
@@ -276,7 +270,6 @@ namespace zjloc
           //           << index_frame << ANSI_COLOR_RESET << std::endl;
           imu_states_.clear(); //   need clear here
 
-          // 利用IMU数据进行状态预测
           zjloc::common::Timer::Evaluate([&]()
                                          { Predict(); },
                                          "predict");
@@ -308,7 +301,6 @@ namespace zjloc
                                          { poseEstimation(p_frame); },
                                          "poseEstimate");
 
-          //   观测
           SE3 pose_of_lo_ = SE3(current_state->rotation, current_state->translation);
           // std::cout << "obs: " << current_state->translation.transpose() << ", " << current_state->rotation.transpose() << std::endl;
           // SE3 pred_pose = eskf_.GetNominalSE3();
@@ -444,7 +436,6 @@ namespace zjloc
                                          "pub cloud");
 
           p_frame->p_state = new state(current_state, true);
-          // all_cloud_frame.push_back(p_frame); //   TODO:     保存这个，特别费内存
           state *tmp_state = new state(current_state, true);
           all_state_frame.push_back(tmp_state);
           current_state = new state(current_state, false);
@@ -457,7 +448,6 @@ namespace zjloc
 
      void lidarodom::poseEstimation(cloudFrame *p_frame)
      {
-          //   TODO: check current_state data
           if (index_frame > 1)
           {
                zjloc::common::Timer::Evaluate([&]()
@@ -864,7 +854,7 @@ namespace zjloc
                     // std::cout << "\033[2K\rDegenerate scene detected. Using external odometry." << std::flush;
                     // stable_degenerate_count++;
                     // stable_exit_degenerate_count = 0;
-                    // if (stable_degenerate_count > 2) { // 连续多帧满足条件才返回退化
+                    // if (stable_degenerate_count > 2) {
                     //      return 1;
                     // }
                     // else return 0;
@@ -873,16 +863,16 @@ namespace zjloc
                // }
                // else if(has_entered_degenerate){
 
-               //      stable_degenerate_count = 0; // 重置退化计数器
+               //      stable_degenerate_count = 0;
                //      stable_exit_degenerate_count++;
 
-               //      if (stable_exit_degenerate_count > 2) // 连续多帧满足退出退化条件才返回退出退化
+               //      if (stable_exit_degenerate_count > 2)
                //      {
                //         return 0;
                //      }
                //      else
                //      {
-               //         return 1; // 仍然处于退化状态
+               //         return 1;
                //      }
                // }
           }
@@ -893,7 +883,6 @@ namespace zjloc
                return 1;
           }
 
-          // return 0;
      }
 
      Neighborhood lidarodom::computeNeighborhoodDistribution(const std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> &points)
@@ -948,20 +937,17 @@ namespace zjloc
            {
              auto neighborhood = computeNeighborhoodDistribution(vector_neighbors);
              planarity_weight = std::pow(neighborhood.a2D, options_.power_planarity);
-             // 保证法线方向一致
              if (neighborhood.normal.dot(p_frame->p_state->translation_begin - location) < 0)
                neighborhood.normal = -neighborhood.normal;
              return neighborhood;
            };
 
-         // 2) 权重归一化
          double lambda_weight       = std::abs(options_.weight_alpha);
          double lambda_neighborhood = std::abs(options_.weight_neighborhood);
          const double sum           = lambda_weight + lambda_neighborhood;
          lambda_weight /= sum;
          lambda_neighborhood /= sum;
 
-         // 3) 一些阈值/邻域设置
          const short nb_voxels_visited = (p_frame->frame_id < options_.init_num_frames)
                                           ? 2
                                           : options_.voxel_neighborhood;
@@ -970,7 +956,6 @@ namespace zjloc
                                           : options_.threshold_voxel_occupancy;
          const double kMaxPointToPlane  = options_.max_dist_to_plane_icp;
 
-         // 4) 预分配：估算最坏情况容量
          size_t max_possible =
            std::min<size_t>(keypoints.size() * options_.num_closest_neighbors,
                             options_.max_num_residuals);
@@ -982,13 +967,11 @@ namespace zjloc
          int num_residuals = 0;
          const size_t N    = keypoints.size();
 
-         // 5) 主循环
          for (size_t k = 0; k < N; ++k)
          {
              const auto &kp        = keypoints[k];
              const auto &raw_point = kp.raw_point;
 
-             // 5.1) 搜邻域
              std::vector<voxel> voxels;
              auto vector_neighbors = searchNeighbors(
                voxel_map,
@@ -1002,7 +985,6 @@ namespace zjloc
              if (vector_neighbors.size() < options_.min_number_neighbors)
                  continue;
 
-             // 5.2) 计算初步权重
              double planarity_w = 0;
              Eigen::Vector3d location = TIL_ * raw_point;
              auto neighborhood = estimatePointNeighborhood(vector_neighbors,
@@ -1015,7 +997,6 @@ namespace zjloc
                                  / (kMaxPointToPlane * options_.min_number_neighbors)
                                );
 
-             // 5.3) 对前 num_closest_neighbors 个邻域点都生成残差
              for (int i = 0;
                   i < options_.num_closest_neighbors
                   && size_t(i) < vector_neighbors.size();
@@ -1027,14 +1008,11 @@ namespace zjloc
                  if (dist >= options_.max_dist_to_plane_icp)
                      continue;
 
-                 // 新增一个残差
                  ++num_residuals;
 
-                 // 法向量归一化
                  Eigen::Vector3d nvec = neighborhood.normal.normalized();
                  double offset = -nvec.dot(vector_neighbors[i]);
 
-                 // 创建 cost function
                  ceres::CostFunction *cost_f = nullptr;
                  switch (options_.icpmodel)
                  {
@@ -1089,133 +1067,7 @@ namespace zjloc
              if (num_residuals >= options_.max_num_residuals) break;
          }
 
-         // 6) 更新输出 keypoints & normals，使其与 surf 一一对应
          keypoints = std::move(valid_keypoints);
-          
-         
-          {
-//           auto estimatePointNeighborhood = [&](std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> &vector_neighbors,
-//                                                Eigen::Vector3d &location, double &planarity_weight)
-//           {
-//                auto neighborhood = computeNeighborhoodDistribution(vector_neighbors);
-//                planarity_weight = std::pow(neighborhood.a2D, options_.power_planarity);
-
-//                if (neighborhood.normal.dot(p_frame->p_state->translation_begin - location) < 0)
-//                {
-//                     neighborhood.normal = -1.0 * neighborhood.normal;
-//                }
-//                return neighborhood;
-//           };
-
-//           double lambda_weight = std::abs(options_.weight_alpha);
-//           double lambda_neighborhood = std::abs(options_.weight_neighborhood);
-//           const double kMaxPointToPlane = options_.max_dist_to_plane_icp;
-//           const double sum = lambda_weight + lambda_neighborhood;
-
-//           lambda_weight /= sum;
-//           lambda_neighborhood /= sum;
-
-//           const short nb_voxels_visited = p_frame->frame_id < options_.init_num_frames
-//                                               ? 2
-//                                               : options_.voxel_neighborhood;
-
-//           const int kThresholdCapacity = p_frame->frame_id < options_.init_num_frames
-//                                              ? 1
-//                                              : options_.threshold_voxel_occupancy;
-
-//           size_t num = keypoints.size();
-//           int num_residuals = 0;
-
-//           for (int k = 0; k < num; k++)
-//           {
-//                auto &keypoint = keypoints[k];
-//                auto &raw_point = keypoint.raw_point;
-
-//                std::vector<voxel> voxels;
-//                auto vector_neighbors = searchNeighbors(voxel_map, keypoint.point,
-//                                                        nb_voxels_visited,
-//                                                        options_.size_voxel_map,
-//                                                        options_.max_number_neighbors,
-//                                                        kThresholdCapacity,
-//                                                        options_.estimate_normal_from_neighborhood
-//                                                            ? nullptr
-//                                                            : &voxels);
-
-//                if (vector_neighbors.size() < options_.min_number_neighbors)
-//                     continue;
-
-//                double weight;
-
-//                Eigen::Vector3d location = TIL_ * raw_point;
-
-//                auto neighborhood = estimatePointNeighborhood(vector_neighbors, location /*raw_point*/, weight);
-
-//                weight = lambda_weight * weight + lambda_neighborhood *
-//                                                      std::exp(-(vector_neighbors[0] -
-//                                                                 keypoint.point)
-//                                                                    .norm() /
-//                                                               (kMaxPointToPlane *
-//                                                                options_.min_number_neighbors));
-
-//                double point_to_plane_dist;
-//                std::set<voxel> neighbor_voxels;
-//                for (int i(0); i < options_.num_closest_neighbors; ++i)
-//                {
-//                     point_to_plane_dist = std::abs((keypoint.point - vector_neighbors[i]).transpose() * neighborhood.normal);
-
-//                     if (point_to_plane_dist < options_.max_dist_to_plane_icp)
-//                     {
-
-//                          num_residuals++;
-
-//                          Eigen::Vector3d norm_vector = neighborhood.normal;
-//                          norm_vector.normalize();
-
-//                          normals.push_back(norm_vector); //   record normal
-
-//                          double norm_offset = -norm_vector.dot(vector_neighbors[i]);
-
-//                          switch (options_.icpmodel)
-//                          {
-//                          case IcpModel::CT_POINT_TO_PLANE:
-//                          {
-// #ifdef USE_ANALYTICAL_DERIVATE
-//                               CT_ICP::CTLidarPlaneNormFactor *cost_function =
-//                                   new CT_ICP::CTLidarPlaneNormFactor(keypoints[k].raw_point, norm_vector, norm_offset, keypoints[k].alpha_time, weight);
-// #else
-//                               auto *cost_function = CT_ICP::CTPointToPlaneFunctor::Create(vector_neighbors[0],
-//                                                                                           keypoints[k].raw_point,
-//                                                                                           norm_vector,
-//                                                                                           keypoints[k].alpha_time,
-//                                                                                           weight);
-// #endif
-//                               surf.push_back(cost_function);
-//                               // problem.AddResidualBlock(cost_function, loss_function, &begin_t.x(), &begin_quat.x(), &end_t.x(), &end_quat.x());
-//                               break;
-//                          }
-//                          case IcpModel::POINT_TO_PLANE:
-//                          {
-//                               Eigen::Vector3d point_end = p_frame->p_state->rotation.inverse() * keypoints[k].point -
-//                                                           p_frame->p_state->rotation.inverse() * p_frame->p_state->translation;
-// #ifdef USE_ANALYTICAL_DERIVATE
-//                               CT_ICP::LidarPlaneNormFactor *cost_function =
-//                                   new CT_ICP::LidarPlaneNormFactor(point_end, norm_vector, norm_offset, weight);
-// #else
-//                               auto *cost_function = CT_ICP::PointToPlaneFunctor::Create(vector_neighbors[0],
-//                                                                                         point_end, norm_vector, weight);
-// #endif
-//                               surf.push_back(cost_function);
-//                               // problem.AddResidualBlock(cost_function, loss_function, &end_t.x(), &end_quat.x());
-//                               break;
-//                          }
-//                          }
-//                     }
-//                }
-
-//                if (num_residuals >= options_.max_num_residuals)
-//                     break;
-//           }
-     }
          
     }
 
@@ -1248,7 +1100,7 @@ namespace zjloc
 
           priority_queue_t priority_queue;
 
-          int max_iterations = 200; // 设置最大迭代次数
+          int max_iterations = 200; 
           int iteration_count = 0;
 
           voxel voxel_temp(kx, ky, kz);
@@ -1262,7 +1114,7 @@ namespace zjloc
                          {
                             std::cerr << "Warning: Exceeded maximum iterations, exiting loop." << std::endl;
                             is_degenerate = true;
-                            goto exit_loops; // 使用 goto 强行退出嵌套循环
+                            goto exit_loops; 
                          }
                          voxel_temp.x = kxx;
                          voxel_temp.y = kyy;
@@ -1294,7 +1146,7 @@ namespace zjloc
                }
           }
 
-          exit_loops: // 跳转到这里退出循环
+          exit_loops:
 
           auto size = priority_queue.size();
           std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> closest_neighbors(size);
@@ -1374,24 +1226,6 @@ namespace zjloc
           pcl_points->points.push_back(cloudTemp);
      }
      
-     /*
-     void lidarodom::map_incremental(cloudFrame *p_frame, int min_num_points)
-     {
-          //   only surf
-          for (const auto &point : p_frame->point_surf)
-          {
-               addPointToMap(voxel_map, point.point, point.intensity,
-                             options_.size_voxel_map, options_.max_num_points_in_voxel,
-                             options_.min_distance_points, min_num_points, p_frame);
-          }
-
-          {
-               std::string laser_topic = "laser";
-               pub_cloud_to_ros(laser_topic, points_world, p_frame->time_frame_end);
-          }
-          points_world->clear();
-     }
-     */
 
      void lidarodom::map_incremental(cloudFrame *p_frame, int min_num_points)
      {
@@ -1522,7 +1356,7 @@ namespace zjloc
 
           if (index_frame < 2) //   only first frame 2 //50-3.53
           {
-               if (!odomQueue.empty()){        ///世界系相同，但是初始化得到的初始位姿不同！！！！
+               if (!odomQueue.empty()){        
                     if(!odomQueue.front().header.stamp.toSec() > time_begin){
                          auto it = std::lower_bound(
                                         odomQueue.begin(), odomQueue.end(), time_begin,
@@ -1614,17 +1448,15 @@ namespace zjloc
                if (imu_buffer_.empty() || lidar_buffer_.empty() || img_buffer_.empty())
                     return measurements;
 
-               // 最新的imu数据需要覆盖掉一帧lidar数据 | time_curr为上一次激光雷达帧的结束时间
                if (imu_buffer_.back()->timestamp_ - time_curr < delay_time_)
                     return measurements;
 
                if (imu_buffer_.back()->timestamp_ < img_time_buffer_.front())
                     return measurements;
                
-               // 获取之前还未使用的lidar点
                auto curr_lidar = lidar_buffer_.front();
                auto lidar = last_lidar_;
-               lidar.reserve(lidar.size() + curr_lidar.size());  // 避免后期编译器自己分配内存, 现在手动分配内存
+               lidar.reserve(lidar.size() + curr_lidar.size());
                lidar.insert(lidar.end(), curr_lidar.begin(), curr_lidar.end());
                lidar_buffer_.pop_front();
                time_buffer_.pop_front();
@@ -1634,7 +1466,6 @@ namespace zjloc
                if (!odomQueue.empty() && odomQueue.front().header.stamp.toSec() < time_begin - delay_time_)
                     odomQueue.pop_front();
 
-               // 筛选相机帧
                std::vector<double> times;
                std::vector<cv::Mat> images;
                int count = 0;
@@ -1649,24 +1480,23 @@ namespace zjloc
                     img_buffer_.pop_front();
                     img_time_buffer_.pop_front();
                }
-               // 避免无images的情况
+               
                if (times.empty())
                {
                     last_lidar_ = lidar;
                     return measurements;
                }
 
-               // 筛选雷达数据
+               
                std::vector<std::vector<point3D>> points;
                std::vector<std::deque<IMUPtr>> imus;
 
-               // 直接按照时间切割
-               size_t p = 0; // lidar点指针
+               size_t p = 0; 
                // double left = begin_time;
                for (size_t k = 0; k < times.size(); ++k)
                {
                     double right = times[k];
-                    // 分割Lidar点
+                    
                     size_t p_left = p;
                     while (p < lidar.size() && lidar[p].timestamp <= right)
                          ++p;
@@ -1674,11 +1504,11 @@ namespace zjloc
                     // left = right;
                }
 
-               // 未使用的剩余点则进行保留
+               
                last_lidar_.clear();
                last_lidar_.insert(last_lidar_.end(), lidar.begin() + p, lidar.end());
 
-               // 筛选imu帧
+               
                double prev_time = begin_time;
                for (size_t k = 0; k < times.size(); ++k) {
                     double curr_time = times[k];
@@ -1695,10 +1525,10 @@ namespace zjloc
                     prev_time = curr_time;
                }
 
-               // 整合测量数据
+               
                for (size_t k = 0; k < times.size(); ++k)
                {
-                    // 这里meas对应的时间在原始的lidar的基础上进行了修改
+                    
                     MeasureGroup meas;
                     meas.lidar_ = points[k];
                     meas.lidar_begin_time_ = k == 0 ? begin_time : times[k-1];
@@ -1708,41 +1538,6 @@ namespace zjloc
                     measurements.emplace_back(meas);
                }
                time_curr = end_time;
-     
- 
-               {
-               // MeasureGroup meas;
-
-               // meas.lidar_ = lidar_buffer_.front();
-               // meas.lidar_begin_time_ = time_buffer_.front().first;
-               // meas.lidar_end_time_ = meas.lidar_begin_time_ + time_buffer_.front().second;
-               // lidar_buffer_.pop_front();
-               // time_buffer_.pop_front();
-
-               // time_curr = meas.lidar_end_time_;
-               // time_begin = meas.lidar_begin_time_;
-
-               // if (!odomQueue.empty() && odomQueue.front().header.stamp.toSec() < time_begin - delay_time_)
-               //      odomQueue.pop_front();
-
-               // double imu_time = imu_buffer_.front()->timestamp_;
-               // meas.imu_.clear();
-               // while ((!imu_buffer_.empty()) && (imu_time < meas.lidar_end_time_))
-               // {
-               //      imu_time = imu_buffer_.front()->timestamp_;
-               //      if (imu_time > meas.lidar_end_time_)
-               //      {
-               //           break;
-               //      }
-               //      meas.imu_.push_back(imu_buffer_.front());
-               //      imu_buffer_.pop_front();
-               // }
-
-               // if (!imu_buffer_.empty())
-               //      meas.imu_.push_back(imu_buffer_.front()); //   added for Interp
-
-               // measurements.push_back(meas);
-               }
           
           }
      }
@@ -1751,7 +1546,7 @@ namespace zjloc
      {
           imu_states_.emplace_back(eskf_.GetNominalState());
 
-          /// 对IMU状态进行预测
+          
           double time_current = measures_.lidar_end_time_;
           Vec3d last_gyr, last_acc;
           for (auto &imu : measures_.imu_)
@@ -1784,17 +1579,16 @@ namespace zjloc
      void lidarodom::Undistort(std::vector<point3D> &points)
      {
           // auto &cloud = measures_.lidar_;
-          auto imu_state = eskf_.GetNominalState(); // 最后时刻的状态
+          auto imu_state = eskf_.GetNominalState(); 
           // std::cout << __FUNCTION__ << ", " << imu_state.timestamp_ << std::endl;
           SE3 T_end = SE3(imu_state.R_, imu_state.p_);
 
-          /// 将所有点转到最后时刻状态上
+          
           for (auto &pt : points)
           {
                SE3 Ti = T_end;
                NavStated match;
 
-               // 根据pt.time查找时间，pt.time是该点打到的时间与雷达开始时间之差，单位为毫秒
                math::PoseInterp<NavStated>(
                    pt.timestamp, imu_states_, [](const NavStated &s)
                    { return s.timestamp_; },
@@ -1815,9 +1609,8 @@ namespace zjloc
 
           if (imu_init_.InitSuccess())
           {
-               // 读取初始零偏，设置ESKF
+               
                zjloc::ESKFD::Options options;
-               // 噪声由初始化器估计
                // options.gyro_var_ = sqrt(imu_init_.GetCovGyro()[0]);
                // options.acce_var_ = sqrt(imu_init_.GetCovAcce()[0]);
                // options.update_bias_acce_ = false;
@@ -1825,7 +1618,7 @@ namespace zjloc
                eskf_.SetInitialConditions(options, imu_init_.GetInitBg(), imu_init_.GetInitBa(), imu_init_.GetGravity());
                imu_need_init_ = false;
 
-               std::cout << ANSI_COLOR_GREEN_BOLD << "IMU初始化成功" << ANSI_COLOR_RESET << std::endl;
+               std::cout << ANSI_COLOR_GREEN_BOLD << "IMU init" << ANSI_COLOR_RESET << std::endl;
           }
      }
 

@@ -87,19 +87,15 @@ namespace zjloc
 
      private:
           void loadOptions();
-          /// 使用IMU初始化
+     
           void TryInitIMU();
 
-          /// 利用IMU预测状态信息
-          /// 这段时间的预测数据会放入imu_states_里
           void Predict();
 
-          /// 对measures_中的点云去畸变
           void Undistort(std::vector<point3D> &points);
 
           std::vector<MeasureGroup> getMeasureMents();
 
-          /// 处理同步之后的IMU和雷达数据
           void ProcessMeasurements(MeasureGroup &meas);
 
           void stateInitialization();
@@ -137,7 +133,6 @@ namespace zjloc
 
           Eigen::Matrix3d computeGravityAlignment(const Eigen::Vector3d& g_odom, const Eigen::Vector3d& g_imu) const;
 
-          // search neighbors
           Neighborhood computeNeighborhoodDistribution(
               const std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>> &points);
 
@@ -152,27 +147,27 @@ namespace zjloc
           }
 
      private:
-          /// @brief 数据
+          /// @brief 
           std::string config_yaml_;
-          StaticIMUInit imu_init_;    // IMU静止初始化
-          SE3 TIL_;                   //   lidar 转换到 imu
-          Eigen::Vector3d rough_translation_offset; // 粗略的平移偏移
-          MeasureGroup measures_;     // sync IMU and lidar scan
-          bool imu_need_init_ = true; // 是否需要估计IMU初始零偏
+          StaticIMUInit imu_init_;  
+          SE3 TIL_; 
+          Eigen::Vector3d rough_translation_offset;
+          MeasureGroup measures_;  
+          bool imu_need_init_ = true;
           int index_frame = 1;
           liwOptions options_;
 
           voxelHashMap voxel_map;
-          Eigen::Matrix3d R_imu_lidar = Eigen::Matrix3d::Identity(); //   lidar 转换到 imu坐标系下
+          Eigen::Matrix3d R_imu_lidar = Eigen::Matrix3d::Identity(); 
           Eigen::Vector3d t_imu_lidar = Eigen::Vector3d::Zero();     //   need init
           double laser_point_cov = 0.001;
 
           double PR_begin[6] = {0, 0, 0, 0, 0, 0}; //  p         r
           double PR_end[6] = {0, 0, 0, 0, 0, 0};   //  p         r
 
-          /// @brief 滤波器
+          /// @brief 
           ESKFD eskf_;
-          std::vector<NavStated> imu_states_; // ESKF预测期间的状态
+          std::vector<NavStated> imu_states_; 
           IMUPtr last_imu_ = nullptr;
 
           double time_curr;
@@ -180,40 +175,39 @@ namespace zjloc
           double delay_time_;
           Vec3d g_{0, 0, -9.8};
 
-          /// @brief 数据管理及同步
+          /// @brief 
           std::deque<std::vector<point3D>> lidar_buffer_;
-          std::deque<IMUPtr> imu_buffer_;    // imu数据缓冲
-          double last_timestamp_imu_ = -1.0; // 最近imu时间
-          double last_timestamp_lidar_ = 0;  // 最近lidar时间
+          std::deque<IMUPtr> imu_buffer_;    
+          double last_timestamp_imu_ = -1.0; 
+          double last_timestamp_lidar_ = 0;  
           std::deque<std::pair<double, double>> time_buffer_;
 
           double last_timestamp_img_ = 0;
           std::deque<double> img_time_buffer_;
           std::deque<cv::Mat> img_buffer_;
-          std::vector<point3D> last_lidar_;    // 时间同步中未被使用的lidar点
-          // 阈值检测器
+          std::vector<point3D> last_lidar_; 
+          
           int low_cnt_  = 0;
           int high_cnt_ = 0;
-          // 当前状态：0=正常（未退化），1=退化
           int state_degeneracy = 0;
 
           // lidar_degenerate
-          bool is_degenerate = false; // 标记当前帧是否退化
+          bool is_degenerate = false;
           bool first_is_degenerate = false;
-          bool has_entered_degenerate = false; // 是否已经进入过退化状态
-          bool prev_is_degenerate = false; // 上一帧是否退化
-          bool first_degenerate = false; // 标记是否是第一次退化
-          bool first_exit_degenerate = false; // 是否是退出退化的第一帧
+          bool has_entered_degenerate = false; 
+          bool prev_is_degenerate = false; 
+          bool first_degenerate = false;
+          bool first_exit_degenerate = false; 
           bool entered_degenerate = false;
-          bool second_degenerate = false;  // 是否是第二次退化
+          bool second_degenerate = false; 
           bool single_frame_degenerate = false;
           bool in_ex_key = false;
           bool ex_in_key = false;
-          bool first_exit_lable = false; // 是否是第一次退出标签
+          bool first_exit_lable = false; 
           bool key = false;
           SE3 T_ext_to_int;
           SE3 T_int_to_smoothed_ext; 
-          SE3 T_ext_to_smoothed_int;       // 外部到平滑内部的变换矩阵
+          SE3 T_ext_to_smoothed_int;    
 
           SE3 external_pose;
           SE3 Last_external_pose;
@@ -228,8 +222,8 @@ namespace zjloc
           nav_msgs::Odometry startOdomMsg;
           nav_msgs::Odometry endOdomMsg;
 
-          Eigen::Vector3d g_odom = Eigen::Vector3d(0, 0, -1); // 里程计的重力方向
-          Eigen::Vector3d g_imu = Eigen::Vector3d(0, -1, 0);  // IMU 的重力方向
+          Eigen::Vector3d g_odom = Eigen::Vector3d(0, 0, -1); 
+          Eigen::Vector3d g_imu = Eigen::Vector3d(0, -1, 0); 
 
           std::string text;
 
@@ -241,7 +235,7 @@ namespace zjloc
 
           state *current_state;
           std::vector<cloudFrame *> all_cloud_frame; //  cache all frame
-          std::vector<state *> all_state_frame;      //   多保留一份state，这样可以不用去缓存all_cloud_frame
+          std::vector<state *> all_state_frame; 
 
           std::function<bool(std::string &topic_name, CloudPtr &cloud, double time)> pub_cloud_to_ros;
           std::function<bool(std::string &topic_name, SE3 &pose, double time)> pub_pose_to_ros;

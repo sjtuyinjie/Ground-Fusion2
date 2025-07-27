@@ -700,17 +700,6 @@ void Voxel_mapping::read_ros_parameters( ros::NodeHandle &nh )
     nh.param< vector< double > >( "mapping/extrinsic_T", m_extrin_T, vector< double >() );
     nh.param< vector< double > >( "mapping/extrinsic_R", m_extrin_R, vector< double >() );
 
-    std::cout << "m_extrin_T: ";
-    for (const auto& val : m_extrin_T) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "m_extrin_R: ";
-    for (const auto& val : m_extrin_R) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;
     nh.param< vector< double > >( "camera/Pcl", m_camera_extrin_T, vector< double >() );
     nh.param< vector< double > >( "camera/Rcl", m_camera_extrin_R, vector< double >() );
 
@@ -794,18 +783,7 @@ void Voxel_mapping::read_ros_parameters( ros::NodeHandle &nh )
     m_topics.push_back(m_img_topic);
 
 
-    cout << "[Ros_parameter]: Camera Intrinsic: " << endl;
-    cout << m_camera_intrinsic << endl;
-    cout << "[Ros_parameter]: Camera distcoeff: " << m_camera_dist_coeffs.transpose() << endl;
-    cout << "[Ros_parameter]: Camera extrinsic R(camera to lidar): " << endl;
-    cout << m_camera_ext_R << endl;
-    cout << "[Ros_parameter]: Camera extrinsic T(camera to lidar): " << m_camera_ext_t.transpose() << endl;
-    /////////////////////////////////////////////////
-
     m_p_pre->blind_sqr = m_p_pre->blind * m_p_pre->blind;
-    cout << "Ranging cov:" << m_dept_err << " , angle cov:" << m_beam_err << std::endl;
-    cout << "Meshing distance scale:" << m_meshing_distance_scale << " , points minimum scale:" << m_meshing_points_minimum_scale << std::endl;
-
     extR << MAT_FROM_ARRAY( m_extrin_R );
     extT << VEC_FROM_ARRAY( m_extrin_T );
 

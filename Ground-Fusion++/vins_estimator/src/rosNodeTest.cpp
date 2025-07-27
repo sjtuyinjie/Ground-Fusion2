@@ -28,7 +28,7 @@
 #include <darknet_ros_msgs/ObjectCount.h>
 
 #include <condition_variable>
-Estimator estimator; //全局实例化
+Estimator estimator;
 
 int syncflag = 0;
 
@@ -36,9 +36,6 @@ queue<sensor_msgs::ImuConstPtr> imu_buf;
 queue<sensor_msgs::PointCloudConstPtr> feature_buf;
 queue<sensor_msgs::ImageConstPtr> img0_buf;
 queue<sensor_msgs::ImageConstPtr> img1_buf;
-
-// std::deque<sensor_msgs::ImageConstPtr> img0_buf_;
-// std::deque<sensor_msgs::ImageConstPtr> img1_buf_;
 
 queue<std::vector<ObsPtr>> gnss_meas_buf;
 queue<darknet_ros_msgs::BoundingBoxesConstPtr> boxes_buf;
@@ -81,26 +78,6 @@ void img1_callback(const sensor_msgs::ImageConstPtr &img_msg)
     img1_buf.push(img_msg);
     m_buf.unlock();
 }
-
-// void ParseDataImg0(std::deque<sensor_msgs::ImageConstPtr> & img_buff)
-// {
-//     std::lock_guard<std::mutex> l(img0_mutex_);
-//     if(img0_buf_.size() > 0)
-//     {
-//         img_buff.insert(img_buff.end(), img0_buf_.begin(), img0_buf_.end());
-//         img0_buf_.clear();
-//     }
-// }
-
-// void ParseDataImg1(std::deque<sensor_msgs::ImageConstPtr> & img_buff)
-// {
-//     std::lock_guard<std::mutex> l(img1_mutex_);
-//     if(img1_buf_.size() > 0)
-//     {
-//         img_buff.insert(img_buff.end(), img1_buf_.begin(), img1_buf_.end());
-//         img1_buf_.clear();
-//     }
-// }
 
 void SleepTimeMs(int64_t ms)
 {
@@ -324,32 +301,19 @@ cv::Mat getDepthImageFromMsg(const sensor_msgs::ImageConstPtr &img_msg)
     return img;
 }
 
-//合并相同时间戳的两个图像
 // extract images with same timestamp from two topics
 void sync_process()
 {
     while (1)
     {
 
-        int matchflag = 0;   // 是否获得成功的box匹配
+        int matchflag = 0;   
         if (STEREO || DEPTH) // this is the case
         {
             cv::Mat image0, image1;
             std_msgs::Header header;
             double time = 0;
             darknet_ros_msgs::BoundingBoxesConstPtr backboxes, boxes;
-
-            // static std::deque<sensor_msgs::ImageConstPtr> img0_buf;
-            // static std::deque<sensor_msgs::ImageConstPtr> img1_buf;
-
-            // ParseDataImg0(img0_buf);
-            // ParseDataImg1(img1_buf);
-
-            // if(img0_buf.empty() || img1_buf.empty())
-            // {
-            //     SleepTimeMs(2);
-            //     continue;
-            // }
 
             m_buf.lock();
 
@@ -388,8 +352,6 @@ void sync_process()
                               backboxtime = backboxes->image_header.stamp.toSec();
                               if (backboxtime < time)
                                {   // cout<<"<"<<endl<<endl;
-                                  // continue;//if会卡死
-                                  // sleep(0.1);  //实测，用while等待，buf不会更新
                                   backboxes = boxes_buf.back();
                                   backboxtime = backboxes->image_header.stamp.toSec();
                                   // cout << setprecision(19) << "backbox time:" << backboxtime << " time:" << time << endl;
@@ -404,9 +366,6 @@ void sync_process()
                         if ((backboxtime > time || backboxtime == time) && syncflag == 0)
                         {
                             syncflag = 1;
-                            // cout<<"success!"<<endl;//已经成功输出！
-                            // cout << setprecision(19) << "backbox time:" << backboxtime << " time:" << time << endl;
-                            // break;
                         }
                         // {
                         //     std::lock_guard<std::mutex> l(boxes_mutex_);
@@ -535,8 +494,6 @@ void sync_process()
                             backboxtime = backboxes->image_header.stamp.toSec();
                             if (backboxtime < time)
                             {   // cout<<"<"<<endl<<endl;
-                                // continue;//if会卡死
-                                // sleep(0.1);  //实测，用while等待，buf不会更新
                                 backboxes = boxes_buf.back();
                                 backboxtime = backboxes->image_header.stamp.toSec();
                                 // cout << setprecision(19) << "backbox time:" << backboxtime << " time:" << time << endl;
@@ -593,7 +550,7 @@ void sync_process()
             m_buf.unlock();
             if (USE_YOLO)
             {
-                if (!image.empty() && syncflag) // 已经成功对齐时间戳
+                if (!image.empty() && syncflag)
                 {
 
                     if (USE_LINE)
@@ -748,7 +705,7 @@ int main(int argc, char **argv)
     ROS_DEBUG("EIGEN_DONT_PARALLELIZE");
 #endif
 
-    ROS_WARN("waiting for image and imu...");
+    ROS_WARN("waiting for lidar and image...");
 
     registerPub(n);
     

@@ -142,11 +142,10 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
     double voxel_resolution = g_map_rgb_pts_mesh.m_voxel_resolution;
 
     g_mutex_append_map.lock();
-    //存入数据到网格和体素
     for ( long pt_idx = 0; pt_idx < pt_size; pt_idx += append_point_step )
     {
         int  add = 1;
-        int  grid_x = std::round( frame_pts->points[ pt_idx ].x / minimum_pts_size ); //存入网格
+        int  grid_x = std::round( frame_pts->points[ pt_idx ].x / minimum_pts_size );
         int  grid_y = std::round( frame_pts->points[ pt_idx ].y / minimum_pts_size );
         int  grid_z = std::round( frame_pts->points[ pt_idx ].z / minimum_pts_size );
         int  box_x = std::round( frame_pts->points[ pt_idx ].x / voxel_resolution );
@@ -672,7 +671,7 @@ void Voxel_mapping::lidar_callback( const sensor_msgs::PointCloud2::ConstPtr &ms
 
     // PointCloudXYZI::Ptr cloud(new PointCloudXYZI());
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>);
-    pcl::fromROSMsg(*msg, *cloud); // 直接转换，无需去畸变
+    pcl::fromROSMsg(*msg, *cloud);
 
     m_new_lidar_buffer.push_back(cloud);
     // m_time_buffer.push_back(timestamp);

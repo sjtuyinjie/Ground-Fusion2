@@ -134,7 +134,7 @@ bool   g_display_camera_pose_window = false;
 bool   g_display_help_win = false;
 bool   g_follow_cam = true;
 bool   g_mesh_if_color = true;
-bool   g_if_draw_z_plane = true;
+bool   g_if_draw_z_plane = false;
 bool   g_if_draw_wireframe = false;
 bool   g_if_draw_depth = false;
 bool   g_if_depth_bind_cam = true;
@@ -220,7 +220,7 @@ int main( int argc, char **argv )
     ros::init( argc, argv, "laserMapping" );
     voxel_mapping.init_ros_node();
 
-    GLFWwindow *window = g_gl_camera.init_openGL_and_ImGUI( "Groundfusion++ mesh mapping", 1, voxel_mapping.m_GUI_font_size );
+    GLFWwindow *window = g_gl_camera.init_openGL_and_ImGUI( "Mesh", 1, voxel_mapping.m_GUI_font_size );
     if ( !gladLoadGLLoader( ( GLADloadproc ) glfwGetProcAddress ) )
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -252,29 +252,18 @@ int main( int argc, char **argv )
         while(1);
     }
 
-
-    cout << "====Loading parameter=====" << endl;
-
     threshold_scale = voxel_mapping.m_meshing_distance_scale;
     minimum_pts = voxel_mapping.m_meshing_points_minimum_scale * voxel_mapping.m_meshing_distance_scale;
     g_meshing_voxel_size = voxel_mapping.m_meshing_voxel_resolution * voxel_mapping.m_meshing_distance_scale;
     appending_pts_frame = voxel_mapping.m_meshing_number_of_pts_append_to_map;
     region_size = voxel_mapping.m_meshing_region_size * voxel_mapping.m_meshing_distance_scale;
     g_display_mesh = voxel_mapping.m_if_draw_mesh;
-    scope_color( ANSI_COLOR_YELLOW_BOLD );
-    cout << "=========Meshing config ========= " << endl;
-    cout << "Threshold scale = " << threshold_scale << endl;
-    cout << "Minimum pts distance = " << minimum_pts << endl;
-    cout << "Voxel size = " << g_meshing_voxel_size << endl;
-    cout << "Region size = " << region_size << endl;
-
     g_current_frame = -3e8;
     g_triangles_manager.m_pointcloud_map = &g_map_rgb_pts_mesh;
     g_map_rgb_pts_mesh.set_minimum_dis( minimum_pts );
     g_map_rgb_pts_mesh.set_voxel_resolution( g_meshing_voxel_size );
     g_triangles_manager.m_region_size = region_size;
     g_map_rgb_pts_mesh.m_recent_visited_voxel_activated_time = 0;
-    cout << "==== Loading parameter end =====" << endl;
 
     // std::thread thr_mapping = std::thread( &Voxel_mapping::service_LiDAR_update, &voxel_mapping );
     std::thread thr_mesh = std::thread( &Voxel_mapping::sendData, &voxel_mapping );
@@ -334,96 +323,6 @@ int main( int argc, char **argv )
             }
         }
 
-        if ( g_display_main_window )
-        {
-            ImGui::Begin( "ImMesh's Main_windows", &g_display_main_window );               // Create a window called "Hello, world!" and append into it.
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 0.75f), "Groundfusion++ mesh mapping");
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 0.75f), "Github:  ");
-            ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "https://github.com/hku-mars/ImMesh");
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 0.75f), "Author:  ");
-            ImGui::SameLine();
-            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "Jiarong Lin & Chongjian Yuan");
-            if (ImGui::TreeNode("Help"))
-            {
-                ImGui::Text( "[H]    | Display/Close main windows" );
-                ImGui::Text( "[C]    | Show/Close camera pose windows" );
-                ImGui::Text( "[T]    | Follow the camera" );
-                ImGui::Text( "[D]    | Show/close the depth image" );
-                ImGui::Text( "[L]    | Show/close the LiDAR points" );
-                ImGui::Text( "[M]    | Show/close the mesh" );
-                ImGui::Text( "[S]    | Save camera view" );
-                ImGui::Text( "[Z]    | Load camera view" );
-                ImGui::Text( "[+/-]  | Increase/Decrease the line width" );
-                ImGui::Text( "[F1]   | Display help window" );
-                ImGui::Text( "[Space]| To pause the program" );
-                ImGui::Text( "[Esc]  | Exit the program" );
-                ImGui::TreePop();
-                ImGui::Separator();
-            }
-            ImGui::SetNextItemOpen(true, 1);
-            // ImGui::SetNextTreeNodeOpen();
-            if (ImGui::TreeNode("Draw Online reconstructed mesh options:"))
-            {
-                ImGui::RadioButton("Draw mesh's Facet", &g_display_face, 1);
-                ImGui::RadioButton("Draw mesh's Wireframe", &g_display_face, 0);
-                if(ImGui::Checkbox( "Draw mesh with color", &g_mesh_if_color ))
-                {
-                    g_force_refresh_triangle = true;
-                }
-                ImGui::TreePop();
-                ImGui::Separator();
-            }
-            if (ImGui::TreeNode("LiDAR pointcloud reinforcement"))
-            {
-                ImGui::Checkbox( "Enable", &g_if_draw_depth );
-                if(g_if_draw_depth)
-                {
-                    ImGui::Checkbox( "If depth in sensor frame", &g_if_depth_bind_cam );
-                }
-                ImGui::SliderInt( "Reinforced point size", &m_depth_view_camera.m_draw_depth_pts_size, 0, 10 );
-                ImGui::SliderInt( "LiDAR point size", &m_depth_view_camera.m_draw_LiDAR_pts_size, 0, 10 );
-                ImGui::TreePop();
-                ImGui::Separator();
-            }
-            ImGui::Checkbox( "Move follow camera", &g_follow_cam );
-            ImGui::Checkbox( "Mapping pause", &g_flag_pause );
-            ImGui::Checkbox( "Draw LiDAR point", &g_draw_LiDAR_point );
-            if(g_draw_LiDAR_point)
-            {
-                ImGui::SliderInt( "LiDAR point size", & m_depth_view_camera.m_draw_LiDAR_pts_size, 0, 10 );
-            }
-            ImGui::Checkbox( "Axis and Z_plane", &g_if_draw_z_plane );
-
-            ImGui::SliderFloat( "Path width", &g_draw_path_size, 1.0, 10.0f );
-            ImGui::SliderFloat( "Camera size", &g_display_camera_size, 0.01, 10.0, "%lf", ImGuiSliderFlags_Logarithmic );
-
-            if ( ImGui::Button( "  Save Mesh to PLY file  " ) )
-            {
-                int temp_flag = g_flag_pause;
-                g_flag_pause = true;
-                Common_tools::create_dir( data_path_file );
-                save_to_ply_file( std::string( data_path_file ).append( "/rec_mesh.ply" ), g_ply_smooth_factor, g_ply_smooth_k );
-                g_flag_pause = temp_flag;
-            }
-
-            if ( ImGui::Button( "Load Camera view" ) )
-            {
-                g_gl_camera.load_camera( gl_camera_file_name );
-            }
-
-            if ( ImGui::Button( "Save Camera view" ) )
-            {
-                cout << "Save view to " << gl_camera_file_name << endl;
-                g_gl_camera.save_camera( gl_camera_file_name );
-            }
-            ImGui::Checkbox( "Show OpenGL camera paras", &g_display_camera_pose_window );
-            ImGui::Text( "Refresh rate %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate );
-            if ( ImGui::Button( "      Exit Program      " ) ) // Buttons return true when clicked (most widgets return true when edited/activated)
-                glfwSetWindowShouldClose( window, 1 );
-
-            ImGui::End();
-        }
 
         if(g_draw_LiDAR_point)
         {
@@ -474,57 +373,6 @@ int main( int argc, char **argv )
             draw_camera_pose( g_current_frame, g_draw_path_size, 0.3 );
             // draw_camera_pose(g_current_frame, R_pubw2c, t_pubw2c, g_draw_path_size, 1.0);
             draw_camera_trajectory( g_current_frame + 1, g_draw_path_size);
-        }
-
-        // For Key-board control
-        if ( g_gl_camera.if_press_key( "H" ) )
-        {
-            g_display_main_window = !g_display_main_window;
-        }
-        if ( g_gl_camera.if_press_key( "C" ) )
-        {
-            g_display_camera_pose_window = !g_display_camera_pose_window;
-        }
-        if ( g_gl_camera.if_press_key( "F" ) )
-        {
-            g_display_face = !g_display_face;
-        }
-        if ( g_gl_camera.if_press_key( "Space" ) )
-        {
-            g_flag_pause = !g_flag_pause;
-        }
-        if ( g_gl_camera.if_press_key( "S" ) )
-        {
-            g_gl_camera.save_camera( gl_camera_file_name );
-        }
-        if ( g_gl_camera.if_press_key( "Z" ) )
-        {
-            g_gl_camera.load_camera( gl_camera_file_name );
-        }
-        if ( g_gl_camera.if_press_key( "D" ) )
-        {
-            g_if_draw_depth = !g_if_draw_depth;
-        }
-        if ( g_gl_camera.if_press_key( "M" ) )
-        {
-            g_display_mesh = !g_display_mesh;
-        }
-        if ( g_gl_camera.if_press_key( "T" ) )
-        {
-            g_follow_cam = !g_follow_cam;
-            if ( g_current_frame > 1 )
-            {
-                g_gl_camera.set_last_tracking_camera_pos( q_last_avr, t_last_avr );
-            }
-        }
-        if ( g_gl_camera.if_press_key( "Escape" ) )
-        {
-            glfwSetWindowShouldClose( window, 1 );
-        }
-
-        if ( g_gl_camera.if_press_key( "F1" ) )
-        {
-            g_display_help_win = !g_display_help_win;
         }
 
         g_gl_camera.set_gl_camera_pose_matrix();
