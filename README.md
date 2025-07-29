@@ -70,7 +70,7 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 ### 3.1 Ubuntu and ROS
 Tested on Ubuntu 20.04(with ROS Noetic and OpenCV4).
 
-### 3.2 Eigen, Ceres, and PCL
+### 3.2 Prerequisite
 This package requires [Eigen 3.3.7](https://github.com/PX4/eigen), [Ceres 1.14](https://ceres-solver.googlesource.com/ceres-solver),[Sophus](https://github.com/strasdat/Sophus.git ), Sophus_no_template, fmt and Livox-SDK. We provide thridparty folder with all the third-party libraries, you can [download](https://drive.google.com/file/d/1umjPqhYcBjMMFPogh5NlPa7JLTkwftNW/view?usp=drive_link) it and install:
 
 ~~~
