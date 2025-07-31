@@ -138,6 +138,7 @@ We provide a Dockerfile so you can easily replicate our setup. Below are the ste
 
 [Here](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md) you can find a more detailed docker build tutorial.
 
+
 ## 5. Run Examples 🚀
 ### 5.1 M3DGR dataset
 Download [M3DGR](https://github.com/sjtuyinjie/M3DGR) dataset and give a star.
@@ -172,6 +173,7 @@ roslaunch groundfusion2 run_m3dgr.launch
 </table>
 </div>
 
+
 ### 5.2 M2DGR-Plus dataset
 Download [M2DGR-Plus](https://github.com/sjtuyinjie/M2DGR-plus) dataset and give a star.
 
@@ -186,6 +188,7 @@ roslaunch groundfusion2 run_m2dgrp.launch
   <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/parking1_mesh.gif" width="500px" alt="Ground-Fusion++ Demo">
   <div>Parking_01</div>
 </div>
+
 
 ### 5.3 You can use rviz to view the trajectory switching
 If you want to see the switching situation or the mesh quality is poor, you can run the following command to check which subsystem has the problem. Especially when you use AVIA lidar indoors, this often happens.
