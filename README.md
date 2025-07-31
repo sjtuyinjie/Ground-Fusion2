@@ -123,7 +123,7 @@ We provide a Dockerfile so you can easily replicate our setup. Below are the ste
    
 -  Running.
    
-   The one terminal and type:
+   The one container terminal and type:
    ```
    cd /root/ws
    export MESA_GL_VERSION_OVERRIDE=3.3
