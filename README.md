@@ -158,16 +158,16 @@ roslaunch groundfusion2 run_m3dgr.launch
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor04_mesh.gif" width="330px" height="220px">
-      <div>[Outdoor04](https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#51-standard) sequence of M3DGR, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#51-standard">Outdoor04</a> sequence of M3DGR, AVIA</div>
     </td>
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Dark01_mesh.gif" width="400px" height="300px">
-      <div>[Dark01](https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor) sequence of M3DGR, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor">Dark01</a> sequence of M3DGR, AVIA</div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh6.gif" width="400px" height="300px">
-      <div>[Grass02](https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor-1) sequence of M3DGR, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor-1">Grass02</a> sequence of M3DGR, AVIA</div>
     </td>
 </table>
 </div>
