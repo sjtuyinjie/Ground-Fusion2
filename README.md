@@ -157,8 +157,8 @@ roslaunch groundfusion2 run_m3dgr.launch
       <div>Outdoor01 sequence of M3DGR, AVIA</div>
     </td>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh6.gif" width="380px" height="270px">
-      <div>Grass02 sequence of M3DGR, AVIA</div>
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor04_mesh.gif" width="380px" height="270px">
+      <div>Outdoor04 sequence of M3DGR, AVIA</div>
     </td>
   <tr>
     <td align="center" width="400px">
