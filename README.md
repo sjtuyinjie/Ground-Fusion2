@@ -102,7 +102,9 @@ We provide a Dockerfile so you can easily replicate our setup. Below are the ste
    ```
    cd ~/catkin_ws/src
    git clone https://github.com/sjtuyinjie/Ground-Fusion2.git
-   cd docker
+   cp Ground-Fusion++/docker/{Dockerfile,ros.asc} ..
+   cd ..
+   wget 'https://drive.google.com/uc?id=1umjPqhYcBjMMFPogh5NlPa7JLTkwftNW&export=download' && unzip *.zip -d . && rm *.zip
    sudo docker build -t groundfusion2 .
    ```
    
