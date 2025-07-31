@@ -154,20 +154,20 @@ roslaunch groundfusion2 run_m3dgr.launch
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor01_mesh.gif" width="370px" height="280px">
-      <div> <a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#51-standard">Outdoor01</a>, AVIA<div>
+      <div> <a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#51-standard">Outdoor01</a><div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor04_mesh.gif" width="330px" height="220px">
-      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#51-standard">Outdoor04</a>, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#51-standard">Outdoor04</a></div>
     </td>
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Dark01_mesh.gif" width="400px" height="300px">
-      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor">Dark01</a>, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor">Dark01</a></div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh6.gif" width="400px" height="300px">
-      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor-1">Grass02</a>, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#outdoor-1">Grass02</a></div>
     </td>
 </table>
 </div>
@@ -190,21 +190,22 @@ If you want to see the switching situation or the mesh quality is poor, you can 
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="350px" height="270px">
-      <div>Corridor01* sequence of M3DGR, MID360</div>
+      <div>Corridor01* sequence of M3DGR, **MID360**</div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="350px" height="220px">
-      <div>Dynamic01 sequence of M3DGR, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#indoor">Dynamic01</a> sequence of M3DGR, **AVIA**</div>
     </td>
   </tr>
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path5.gif" width="350px" height="220px">
-      <div>Elevator01 sequence of M3DGR, MID360</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#53-lidar-degeneration-">Elevator01</a> sequence of M3DGR, **MID360**</div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path4.gif" width="350px" height="220px">
-      <div>Elevator01 sequence of M3DGR, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#53-lidar-degeneration-">Elevator01</a> sequence of M3DGR, **AVIA**</div>
+      <div> sequence of M3DGR, AVIA</div>
     </td>
   </tr>
 </table>
