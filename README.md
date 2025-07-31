@@ -190,22 +190,21 @@ If you want to see the switching situation or the mesh quality is poor, you can 
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path.gif" width="350px" height="270px">
-      <div>Corridor01* sequence of M3DGR, **MID360**</div>
+      <div>Corridor01* of M3DGR, use MID360</div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path3.gif" width="350px" height="220px">
-      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#indoor">Dynamic01</a> sequence of M3DGR, **AVIA**</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#indoor">Dynamic01</a> of M3DGR, use AVIA</div>
     </td>
   </tr>
   <tr>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path5.gif" width="350px" height="220px">
-      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#53-lidar-degeneration-">Elevator01</a> sequence of M3DGR, **MID360**</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#53-lidar-degeneration-">Elevator01</a> of M3DGR, use MID360</div>
     </td>
     <td align="center" width="400px">
       <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/switch_path4.gif" width="350px" height="220px">
-      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#53-lidar-degeneration-">Elevator01</a> sequence of M3DGR, **AVIA**</div>
-      <div> sequence of M3DGR, AVIA</div>
+      <div><a href="https://github.com/sjtuyinjie/M3DGR?tab=readme-ov-file#53-lidar-degeneration-">Elevator01</a> of M3DGR, use AVIA</div>
     </td>
   </tr>
 </table>
