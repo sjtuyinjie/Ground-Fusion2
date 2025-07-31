@@ -87,7 +87,7 @@ cd ../..
 catkin_make
 ```
 
-### 3.4 Running with Docker
+### 4. Running with Docker
 We provide a Dockerfile so you can easily replicate our setup. Below are the steps to build the Docker image.
 
 1. Install docker and nvidia-docker2. You can find tutorials like our [readme](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md).
@@ -134,9 +134,10 @@ We provide a Dockerfile so you can easily replicate our setup. Below are the ste
    rosbag play Dynamic01.bag
    ```
 
+[Here](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md) you can find a more detailed docker build tutorial.
 
-## 4. Run Examples 🚀
-### 4.1 M3DGR dataset
+## 5. Run Examples 🚀
+### 5.1 M3DGR dataset
 Download [M3DGR](https://github.com/sjtuyinjie/M3DGR) dataset and give a star.
 
 
@@ -160,7 +161,7 @@ roslaunch groundfusion2 run_m3dgr.launch
 </table>
 </div>
 
-### 4.2 M2DGR-Plus dataset
+### 5.2 M2DGR-Plus dataset
 Download [M2DGR-Plus](https://github.com/sjtuyinjie/M2DGR-plus) dataset and give a star.
 
 
@@ -170,7 +171,7 @@ source devel/setup.bash
 roslaunch groundfusion2 run_m2dgrp.launch
 ~~~
 
-### 4.3 You can use rviz to view the trajectory switching
+### 5.3 You can use rviz to view the trajectory switching
 If you want to see the switching situation or the mesh quality is poor, you can run the following command to check which subsystem has the problem. Especially when you use AVIA lidar indoors, this often happens.
 
 <div align=center>
@@ -215,7 +216,7 @@ rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 
 
 
-## 5. Citation 📄
+## 6. Citation 📄
 
 ```bibtex
 @article{zhang2025towards,
@@ -246,6 +247,6 @@ rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 
 ```
 
-## 6. Star History ⭐️
+## 7. Star History ⭐️
 
 [![Star History Chart](https://api.star-history.com/svg?repos=sjtuyinjie/Ground-Fusion2&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)
