@@ -182,6 +182,17 @@ source devel/setup.bash
 roslaunch groundfusion2 run_m2dgrp.launch
 ~~~
 
+<div align=center>
+<table>
+  <tr>
+    <td align="center" width="400px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/parking1_mesh.gif" width="370px" height="280px">
+      <div> Parking_01<div>
+    </td>
+  <tr>
+</table>
+</div>
+
 ### 5.3 You can use rviz to view the trajectory switching
 If you want to see the switching situation or the mesh quality is poor, you can run the following command to check which subsystem has the problem. Especially when you use AVIA lidar indoors, this often happens.
 
