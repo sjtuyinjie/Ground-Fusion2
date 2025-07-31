@@ -153,20 +153,20 @@ roslaunch groundfusion2 run_m3dgr.launch
 <table>
   <tr>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor01_mesh.gif" width="400px" height="300px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor01_mesh.gif" width="350px" height="300px">
       <div>Outdoor01 sequence of M3DGR, AVIA</div>
     </td>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor04_mesh.gif" width="380px" height="240px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Outdoor04_mesh.gif" width="330px" height="240px">
       <div>Outdoor04 sequence of M3DGR, AVIA</div>
     </td>
   <tr>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Dark01_mesh.gif" width="450px" height="350px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/Dark01_mesh.gif" width="400px" height="350px">
       <div>Dark01 sequence of M3DGR, AVIA</div>
     </td>
     <td align="center" width="400px">
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh6.gif" width="450px" height="350px">
+      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/mesh6.gif" width="400px" height="350px">
       <div>Grass02 sequence of M3DGR, AVIA</div>
     </td>
 </table>
