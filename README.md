@@ -91,19 +91,22 @@ catkin_make
 We provide a Dockerfile so you can easily replicate our setup. Below are the steps to build the Docker image.
 
 1. Install docker and nvidia-docker2. You can find tutorials like our [readme](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md).
-2. Pull the ROS image in advance.
+   
+3. Pull the ROS image in advance.
    ```
    sudo systemctl start docker
    sudo docker pull j3soon/ros-noetic-desktop-full
    ```
-3. Pull and build the Docker image.
+   
+4. Pull and build the Docker image.
    ```
    cd ~/catkin_ws/src
    git clone https://github.com/sjtuyinjie/Ground-Fusion2.git
    cd docker
    sudo docker build -t groundfusion2 .
    ```
-4. Start the container and mount the data directory.
+   
+5. Start the container and mount the data directory.
    ```
    sudo xhost +local:docker
    
@@ -115,7 +118,9 @@ We provide a Dockerfile so you can easily replicate our setup. Below are the ste
     groundfusion2 /bin/bash
    ```
    Change the ```./data``` to the path where the rosbag is actually stored.
-5. Running.
+   
+7. Running.
+   
    The one terminal and type:
    ```
    cd /root/ws
