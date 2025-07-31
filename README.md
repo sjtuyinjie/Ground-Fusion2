@@ -182,9 +182,8 @@ source devel/setup.bash
 roslaunch groundfusion2 run_m2dgrp.launch
 ~~~
 
-<div align=center>
-      <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/parking1_mesh.gif" width="600px" height="300px">
-      <div> Parking_01<div>
+<div align="center">
+  <img src="https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/fig/parking1_mesh.gif" width="800px" alt="Ground-Fusion++ Demo">
 </div>
 
 ### 5.3 You can use rviz to view the trajectory switching
