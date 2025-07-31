@@ -90,7 +90,7 @@ catkin_make
 ## 4. Running with Docker
 We provide a Dockerfile so you can easily replicate our setup. Below are the steps to build the Docker image.
 
-- Install docker and nvidia-docker2. You can find tutorials like our [readme](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md).
+- Install docker and nvidia-docker2. You can find tutorials like [this](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md).
    
 -  Pull the ROS image in advance.
    ```
