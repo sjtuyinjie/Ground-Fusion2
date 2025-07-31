@@ -1,6 +1,8 @@
 # 使用更可靠的基础镜像
 FROM j3soon/ros-noetic-desktop-full:latest
 
+COPY ros.asc /tmp/ros.asc
+
 # 1. 修复软件源 - 完全重新配置
 RUN \
     # 备份原始源列表
@@ -15,7 +17,7 @@ RUN \
     apt-get update -o Acquire::Retries=5 && \
     apt-get install -y --no-install-recommends curl gnupg2 ca-certificates lsb-release && \
     # 获取最新ROS密钥 (从官方源)
-    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | gpg --dearmor -o /usr/share/keyrings/ros-archive-keyring.gpg && \
+    gpg --dearmor -o /usr/share/keyrings/ros-archive-keyring.gpg /tmp/ros.asc && \
     # 添加清华ROS源 (国内镜像)
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] https://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list && \
     # 再次更新
