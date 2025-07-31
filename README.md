@@ -87,7 +87,48 @@ cd ../..
 catkin_make
 ```
 
-or refer to [readme](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md) for docker suppoert.
+### 3.4 Running with docker
+We provide a Dockerfile so you can easily replicate our setup. Below are the steps to build the Docker image.
+
+1. Install docker and nvidia-docker2. You can find tutorials like our [readme](https://github.com/sjtuyinjie/Ground-Fusion2/blob/main/Ground-Fusion%2B%2B/docker/readme.md).
+2. Pull the ROS image in advance.
+   ```
+   sudo systemctl start docker
+   sudo docker pull j3soon/ros-noetic-desktop-full
+   ```
+3. Pull and build the Docker image.
+   ```
+   cd ~/catkin_ws/src
+   git clone https://github.com/sjtuyinjie/Ground-Fusion2.git
+   cd docker
+   sudo docker build -t groundfusion2 .
+   ```
+4. Start the container and mount the data directory.
+   ```
+   sudo xhost +local:docker
+   
+   sudo docker run -it --rm \
+    --env="DISPLAY=$DISPLAY" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --device=/dev/dri \
+    -v ./data:/root/data \    
+    groundfusion2 /bin/bash
+   ```
+   Change the ```./data``` to the path where the rosbag is actually stored.
+5. Running.
+   The one terminal and type:
+   ```
+   cd /root/ws
+   export MESA_GL_VERSION_OVERRIDE=3.3
+   source devel/setup.bash
+   roslaunch groundfusion2 run_m3dgr.launch
+   ```
+   Open another container terminal:
+   ```
+   cd /root/data
+   rosbag play Dynamic01.bag
+   ```
+
 
 ## 4. Run Examples 🚀
 ### 4.1 M3DGR dataset
