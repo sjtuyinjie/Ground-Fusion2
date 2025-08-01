@@ -2,7 +2,7 @@
 
 
 imu: 1
-wheel: 0
+wheel: 1
 depth: 1
 gnss_enable: 0
 w_replace: 1
