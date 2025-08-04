@@ -273,7 +273,7 @@ rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 
 ## 8. Contributing 👷‍♂️
 
-We appreciate all contributions to improving Any4LeRobot.
+We appreciate all contributions to improving Ground-Fusion++.
 
 <a href="https://github.com/sjtuyinjie/Ground-Fusion2/graphs/contributors" target="_blank">
   <table>
