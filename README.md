@@ -269,3 +269,31 @@ rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 ## 7. Star History ⭐️
 
 [![Star History Chart](https://api.star-history.com/svg?repos=sjtuyinjie/Ground-Fusion2&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)
+
+
+## 8. Contributing 👷‍♂️
+
+We appreciate all contributions to improving Any4LeRobot.
+
+<a href="https://github.com/sjtuyinjie/Ground-Fusion2/graphs/contributors" target="_blank">
+  <table>
+    <tr>
+      <th colspan="2">
+        <br><img src="https://contrib.rocks/image?repo=sjtuyinjie/Ground-Fusion2"><br><br>
+      </th>
+    </tr>
+  </table>
+</a>
+
+## 9. Acknowledgements 🤝
+
+
+Thanks to everyone for supporting this project.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://reporoster.com/stars/dark/sjtuyinjie/Ground-Fusion2" />
+  <source media="(prefers-color-scheme: light)" srcset="https://reporoster.com/stars/sjtuyinjie/Ground-Fusion2" />
+  <img alt="github-stargazers" src="https://github.com/sjtuyinjie/Ground-Fusion2/stargazers" />
+</picture>
+
+<p align="right"><a href="#top">🔝Back to top</a></p>
