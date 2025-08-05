@@ -57,6 +57,8 @@ In this work, we propose a complete solution for robust SLAM on ground robots op
 
 ## 2. Key Features 🔧
 
+Our focus is **not on theoretical novelty**, but on building a **resilient and modular system that is simple yet effective**, serving as a practical and extensible baseline for real-world deployment and future research.
+
 - **Multi-sensor Integration:** GNSS, RGB-D camera, IMU, wheel odometer, and LiDAR.  
 - **Robustness:** Combines state-of-the-art SLAM components to ensure accurate localization and mapping in large-scale, real-world scenarios.  
 - **Modularity:** Designed as an extensible baseline to support future research and practical deployments in complex environments.
