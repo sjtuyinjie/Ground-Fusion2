@@ -234,6 +234,7 @@ rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 > - In most sequences, our provided configurations can directly reproduce the results reported in the paper. However, in certain cases, parameter fine-tuning may be required for optimal performance
 > - The mapping thread is relatively computationally intensive and may require a good machine to run smoothly.
 > - 💡Our team is actively working on a next-generation version of Ground-Fusion++. Stay tuned for updates and follow our latest research!!
+> - Open to collaboration! If you are willing to develop a robust and resilient SLAM system with super advanced performance and contribute to the open-source community, please contact us at robot_yinjie@outlook.com   
 
 
 
