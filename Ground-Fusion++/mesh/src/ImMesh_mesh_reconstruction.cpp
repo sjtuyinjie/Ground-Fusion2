@@ -246,7 +246,7 @@ void incremental_mesh_reconstruction( pcl::PointCloud< pcl::PointXYZI >::Ptr fra
     R_c2i = extR;
     t_c2i = extT;
 
-    R_c2w = R_c2i * rot_i2w;
+    R_c2w = rot_i2w * R_c2i;
     t_c2w = rot_i2w * t_c2i + pos_i2w;
     
     R_w2c = R_c2w * R_imu_to_fusion;
