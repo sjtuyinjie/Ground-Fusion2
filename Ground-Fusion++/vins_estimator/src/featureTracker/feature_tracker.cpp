@@ -159,7 +159,7 @@ map<int, vector<pair<int, Eigen::Matrix<double, 8, 1>>>> FeatureTracker::trackIm
             int p_u, p_v;
             p_u = (int)cur_pts[i].x;
             p_v = (int)cur_pts[i].y;
-            float grey = cur_img.at<uchar>(p_u, p_v);
+            uchar grey = cur_img.at<uchar>(p_v, p_u);
             if (status[i] && grey > 250)
             {
                 status[i] = 0;
@@ -430,7 +430,7 @@ map<int, vector<pair<int, Eigen::Matrix<double, 8, 1>>>> FeatureTracker::trackIm
             int p_u, p_v;
             p_u = (int)cur_pts[i].x;
             p_v = (int)cur_pts[i].y;
-            float grey = cur_img.at<uchar>(p_u, p_v);
+            uchar grey = cur_img.at<uchar>(p_v, p_u);
             if (status[i] && grey > 250)
             {
                 status[i] = 0;
