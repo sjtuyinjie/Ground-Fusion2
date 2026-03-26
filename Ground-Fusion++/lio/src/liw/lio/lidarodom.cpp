@@ -879,7 +879,7 @@ namespace zjloc
           else
           {
                std::cout << ANSI_COLOR_RED << "Too few normal vector received -> " << planeNormals.size() << ANSI_COLOR_RESET << std::endl;
-               permanently_degenerate = true;
+               // permanently_degenerate = true;
                return 1;
           }
 
