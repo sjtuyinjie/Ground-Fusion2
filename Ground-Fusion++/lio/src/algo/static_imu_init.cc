@@ -13,7 +13,7 @@ namespace zjloc
     bool StaticIMUInit::AddIMU(const IMU &imu)
     {
 
-        // std::cout << "进入初始化" << std::endl;  
+        // std::cout << "进入初始化" << std::endl;
 
         if (init_success_)
         {
@@ -101,14 +101,34 @@ namespace zjloc
         if (cov_gyro_.norm() > options_.max_static_gyro_var)
         {
             LOG(ERROR) << "陀螺仪测量噪声太大" << cov_gyro_.norm() << " > " << options_.max_static_gyro_var;
+            consecutive_high_noise_count_++;
+
+            // 连续3帧噪声过大,视为退化
+            if (consecutive_high_noise_count_ >= 3)
+            {
+                imu_noise_degenerate_ = true;
+                LOG(WARNING) << "连续" << consecutive_high_noise_count_ << "帧陀螺仪噪声过大，IMU退化";
+            }
             return false;
         }
 
         if (cov_acce_.norm() > options_.max_static_acce_var)
         {
             LOG(ERROR) << "加计测量噪声太大" << cov_acce_.norm() << " > " << options_.max_static_acce_var;
+            consecutive_high_noise_count_++;
+
+            // 连续3帧噪声过大,视为退化
+            if (consecutive_high_noise_count_ >= 3)
+            {
+                imu_noise_degenerate_ = true;
+                LOG(WARNING) << "连续" << consecutive_high_noise_count_ << "帧加计噪声过大，IMU退化";
+            }
             return false;
         }
+
+        // 噪声正常，重置计数器和退化标志
+        consecutive_high_noise_count_ = 0;
+        imu_noise_degenerate_ = false;
 
         // 估计测量噪声和零偏
         init_bg_ = mean_gyro;
@@ -123,5 +143,39 @@ namespace zjloc
         init_success_ = true;
         return true;
     }
+
+    // void StaticIMUInit::CheckRuntimeNoise(const IMU &imu)
+    // {
+    //     runtime_imu_deque_.push_back(imu);
+    //     // 保持滑动窗口，与初始化队列长度相同
+    //     while (runtime_imu_deque_.size() > options_.init_imu_queue_max_size_)
+    //     {
+    //         runtime_imu_deque_.pop_front();
+    //     }
+
+    //     if (runtime_imu_deque_.size() < 10)
+    //     {
+    //         return;
+    //     }
+
+    //     // 计算加计协方差
+    //     Vec3d mean_acce, cov_acce_rt;
+    //     math::ComputeMeanAndCovDiag(runtime_imu_deque_, mean_acce, cov_acce_rt,
+    //                                 [](const IMU &i) { return i.acce_; });
+
+    //     if (cov_acce_rt.norm() > options_.max_static_acce_var)
+    //     {
+    //         runtime_high_noise_count_++;
+    //         if (runtime_high_noise_count_ >= 3)
+    //         {
+    //             imu_noise_degenerate_ = true;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         runtime_high_noise_count_ = 0;
+    //         imu_noise_degenerate_ = false;
+    //     }
+    // }
 
 } // namespace zjloc

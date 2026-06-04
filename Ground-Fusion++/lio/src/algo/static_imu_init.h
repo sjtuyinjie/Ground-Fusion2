@@ -55,6 +55,12 @@ namespace zjloc
         Vec3d GetInitBa() const { return init_ba_; }
         Vec3d GetGravity() const { return gravity_; }
 
+        /// 检查是否因IMU噪声过大而退化
+        bool IsIMUNoiseDegenerate() const { return imu_noise_degenerate_; }
+
+        /// 运行时噪声检测：传入一帧IMU数据，检测是否连续噪声过大（初始化完成后使用）
+        // void CheckRuntimeNoise(const IMU &imu);
+
     private:
         /// 尝试对系统初始化
         bool TryInit();
@@ -70,6 +76,14 @@ namespace zjloc
         std::deque<IMU> init_imu_deque_; // 初始化用的数据
         double current_time_ = 0.0;      // 当前时间
         double init_start_time_ = 0.0;   // 静止的初始时间
+
+        // IMU噪声退化检测相关
+        int consecutive_high_noise_count_ = 0;  // 连续噪声过大计数器
+        bool imu_noise_degenerate_ = false;     // IMU噪声退化标志
+
+        // 运行时噪声检测（初始化完成后使用）
+        std::deque<IMU> runtime_imu_deque_;
+        int runtime_high_noise_count_ = 0;
     };
 
 } // namespace zjloc

@@ -1,0 +1,64 @@
+YAML: 1.0
+
+preprocess:
+  point_filter_num: 1
+  lidar_type: 5  # 1-AVIA 2-velodyne 3-ouster  4-robosense 5-pandar
+  blind: 0.1
+
+
+common:
+  imu_topic: /alphasense/imu #/imu_raw   /gps/gtimu
+  lid_topic: /hesai/pandar  #/points_raw  /rslidar_points /velodyne_points
+  img_topic: /alphasense/cam0/image_raw/compressed
+
+mapping:
+  extrinsic_est_en: true
+  extrinsic_T: [-0.001, -0.00855, 0.055]  # avia 0.04165, 0.02326, -0.0284  mid60 -0.011, -0.02329, 0.04412
+  extrinsic_R: [0, -1, 0, -1, 0, 0, 0, 0, -1]
+  # extrinsic_R: [0.010025383273369475, -0.9998984634375941, -0.010126919835775315, -0.9998984634375941, -0.010126919835775315, 0.010025383273369475, -0.010126919835775315, 0.010025383273369475, -0.9998984634375941] #1 deg
+  # extrinsic_R: [0.019946176155469973, -0.9995938846793972, -0.02035229147607282, -0.9995938846793972, -0.02035229147607282, 0.019946176155469973, -0.02035229147607282, 0.019946176155469973, -0.9995938846793972] #2 deg
+  # extrinsic_R: [0.029759356676684723, -0.9990863565030492, -0.030673000173635473, -0.9990863565030492, -0.030673000173635473, 0.029759356676684723, -0.030673000173635473, 0.029759356676684723, -0.9990863565030492] #3 deg
+  # extrinsic_R: [0.039461935647164555, -0.9983760335065496, -0.04108590214061506, -0.9983760335065496, -0.04108590214061506, 0.039461935647164555, -0.04108590214061506, 0.039461935647164555, -0.9983760335065496] #4 deg
+  # extrinsic_R: [0.04905095756736407, -0.9974631320611638, -0.051587825506200384, -0.9974631320611638, -0.051587825506200384, 0.04905095756736407, -0.051587825506200384, 0.04905095756736407, -0.9974631320611638] #5 deg
+  # extrinsic_R: [0.058523501528315425, -0.9963479302455154, -0.062175571282799866, -0.9963479302455154, -0.062175571282799866, 0.058523501528315425, -0.062175571282799866, 0.058523501528315425, -0.9963479302455154] #6 deg
+  # extrinsic_R: [0.06787668210136553, -0.9950307677608813, -0.07284591434048417, -0.9950307677608813, -0.07284591434048417, 0.06787668210136553, -0.07284591434048417, 0.06787668210136553, -0.9950307677608813] #7 deg
+  # extrinsic_R: [0.07710765021710553, -0.9935120458277135, -0.08359560438939198, -0.9935120458277135, -0.08359560438939198, 0.07710765021710553, -0.08359560438939198, 0.07710765021710553, -0.9935120458277135] #8 deg
+  # extrinsic_R: [0.08621359403322497, -0.9917922270634252, -0.09442136696979982, -0.9917922270634252, -0.09442136696979982, 0.08621359403322497, -0.09442136696979982, 0.08621359403322497, -0.9917922270634252] #9 deg
+  # extrinsic_R: [0.09519173979102624, -0.989871835341472, -0.10531990444955419, -0.989871835341472, -0.10531990444955419, 0.09519173979102624, -0.10531990444955419, 0.09519173979102624, -0.989871835341472] #10 deg
+
+delay_time: 0.15
+
+odometry:
+  surf_res: 0.2
+  log_print: false
+  max_num_iteration: 10
+  # ct_icp
+  icpmodel: CT_POINT_TO_PLANE                    # Options: [CT_POINT_TO_PLANE, POINT_TO_PLANE]
+  size_voxel_map: 0.2                         # The voxel size of in the voxel map //0.2
+  min_distance_points: 0.05                     # 0.05
+  max_num_points_in_voxel: 20                 # The maximum number of points per voxel of the map
+  max_distance: 500.0                        # The threshold of the distance to suppress voxels from the map
+  weight_alpha: 0.9
+  weight_neighborhood: 0.1
+  max_dist_to_plane_icp: 0.3
+  init_num_frames: 20
+  voxel_neighborhood: 1
+  max_number_neighbors: 20
+  threshold_voxel_occupancy: 1
+  estimate_normal_from_neighborhood: true
+  min_number_neighbors: 20                    # The minimum number of neighbor points to define a valid neighborhood 20
+  power_planarity: 2.0
+  num_closest_neighbors: 1
+
+  sampling_rate: 1.
+  ratio_of_nonground: 2
+  max_num_residuals: 2000
+  min_num_residuals: 300
+  motion_compensation: CONSTANT_VELOCITY #NONE, CONSTANT_VELOCITY, ITERATIVE, CONTINUOUS
+  beta_location_consistency: 1.0  #1.0
+  beta_orientation_consistency: 1.0
+  beta_constant_velocity: 0.0
+  beta_small_velocity: 0.0
+
+  thres_translation_norm: 0.01            # m
+  thres_orientation_norm: 0.1             # deg

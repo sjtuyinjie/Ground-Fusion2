@@ -99,17 +99,17 @@ namespace zjloc
           //           << lidar_R_wrt_IMU << std::endl;
 
           Eigen::Quaterniond q_IL(lidar_R_wrt_IMU);
-          // std::cout << "q_IL : [w, x, y, z] = [" 
-          // << q_IL.w() << ", " 
-          // << q_IL.x() << ", " 
-          // << q_IL.y() << ", " 
+          // std::cout << "q_IL : [w, x, y, z] = ["
+          // << q_IL.w() << ", "
+          // << q_IL.x() << ", "
+          // << q_IL.y() << ", "
           // << q_IL.z() << "]" << std::endl;
 
           q_IL.normalized();
-          // std::cout << "q_IL (normalized): [w, x, y, z] = [" 
-          // << q_IL.w() << ", " 
-          // << q_IL.x() << ", " 
-          // << q_IL.y() << ", " 
+          // std::cout << "q_IL (normalized): [w, x, y, z] = ["
+          // << q_IL.w() << ", "
+          // << q_IL.x() << ", "
+          // << q_IL.y() << ", "
           // << q_IL.z() << "]" << std::endl;
 
           lidar_R_wrt_IMU = q_IL;
@@ -126,7 +126,7 @@ namespace zjloc
           // init TIL
           TIL_ = SE3(q_IL, lidar_T_wrt_IMU);
           // TIL_ = SE3(lidar_R_wrt_IMU, lidar_T_wrt_IMU);
-          
+
           R_imu_lidar = lidar_R_wrt_IMU;
           t_imu_lidar = lidar_T_wrt_IMU;
           std::cout << "RIL:\n"
@@ -273,6 +273,7 @@ namespace zjloc
           zjloc::common::Timer::Evaluate([&]()
                                          { Predict(); },
                                          "predict");
+
           //
           zjloc::common::Timer::Evaluate([&]()
                                          { stateInitialization(); },
@@ -288,13 +289,13 @@ namespace zjloc
           //                                                       meas.lidar_begin_time_,
           //                                                       meas.lidar_end_time_); },
           //                                "build frame");
-          
+
           zjloc::common::Timer::Evaluate([&]()
                                          { p_frame = buildFrame(const_surf, meas.img_, current_state,
                                                                 meas.lidar_begin_time_,
                                                                 meas.lidar_end_time_); },
                                          "build frame");
-          
+
 
           //   lio
           zjloc::common::Timer::Evaluate([&]()
@@ -314,12 +315,12 @@ namespace zjloc
                std::string laser_topic = "laser";
                std::string laser_topic2 = "orin_laser";
                std::string laser_topic3 = "orin_vins";
-               static double z_axis_start = 0.0; 
-               static bool z_axis_recorded = false; 
+               static double z_axis_start = 0.0;
+               static bool z_axis_recorded = false;
 
                if (!odomQueue.empty()){
                     nav_msgs::Odometry externalOdom = getClosestOdom(meas.lidar_end_time_);
-     
+
                     tf::Quaternion orientation;
                     tf::quaternionMsgToTF(externalOdom.pose.pose.orientation, orientation);
                     Eigen::Quaterniond odom_quat(orientation.w(), orientation.x(), orientation.y(), orientation.z());
@@ -328,13 +329,13 @@ namespace zjloc
                               externalOdom.pose.pose.position.y,
                               externalOdom.pose.pose.position.z
                          );
-     
-                    external_pose = SE3(Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()), R_align * odom_trans);
+
+                    external_pose = SE3(Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()).normalized(), R_align * odom_trans);
                }
 
                if (first_is_degenerate && is_degenerate) {
 
-                    if (first_degenerate) {   
+                    if (first_degenerate) {
                          text = "Switch to VIO";
                          VIO_to_LIO = external_pose.inverse() * pose_of_lo_;
                          first_degenerate = false;
@@ -345,13 +346,13 @@ namespace zjloc
                } else if (first_is_degenerate && !is_degenerate) {
 
                     if (first_exit_degenerate) {
-                         
+
                          text = "Switch to LIO";
                          LIO_to_Fused = Last_pose_of_lo_.inverse() * fused_pose;
 
                          first_exit_degenerate = false;
                     }
-                         fused_pose = SE3(LIO_to_Fused.rotationMatrix() * pose_of_lo_.rotationMatrix(),
+                         fused_pose = SE3(Eigen::Quaterniond(LIO_to_Fused.rotationMatrix() * pose_of_lo_.rotationMatrix()).normalized(),
                                            pose_of_lo_.translation() + LIO_to_Fused.translation());
                          pub_pose_to_ros(laser_topic, fused_pose, meas.lidar_end_time_);
                }
@@ -373,19 +374,19 @@ namespace zjloc
                          Eigen::Vector3d translation_offset = fused_translation - last_translation;
                          Eigen::Matrix3d rotation_offset =  last_rotation.inverse() * fused_rotation;
 
-                         VIO_to_Fused = SE3(rotation_offset, translation_offset);
+                         VIO_to_Fused = SE3(Eigen::Quaterniond(rotation_offset).normalized(), translation_offset);
                          first_degenerate = false;
-                         
+
                     }
                          // fused_pose =  external_pose * VIO_to_Fused;
-                         fused_pose = SE3(external_pose.rotationMatrix() * VIO_to_Fused.rotationMatrix(),
+                         fused_pose = SE3(Eigen::Quaterniond(external_pose.rotationMatrix() * VIO_to_Fused.rotationMatrix()).normalized(),
                                            external_pose.translation() + VIO_to_Fused.translation());
                          pub_pose_to_ros(laser_topic, fused_pose, meas.lidar_end_time_);
                } else if (!first_is_degenerate && !is_degenerate && has_entered_degenerate) {
 
                     if (first_exit_degenerate) {
                              text = "Switch to LIO";
-                             
+
                          //     LIO_to_Fused = Last_pose_of_lo_.inverse() * fused_pose;
 
                              Eigen::Vector3d last_translation = Last_pose_of_lo_.translation();
@@ -397,12 +398,12 @@ namespace zjloc
                              Eigen::Vector3d translation_offset = fused_translation - last_translation;
                              Eigen::Matrix3d rotation_offset =  last_rotation.inverse() * fused_rotation;
 
-                             LIO_to_Fused = SE3(rotation_offset, translation_offset);
+                             LIO_to_Fused = SE3(Eigen::Quaterniond(rotation_offset).normalized(), translation_offset);
 
                          first_exit_degenerate = false;
                     }
                          // fused_pose = pose_of_lo_ * LIO_to_Fused;
-                         fused_pose = SE3(pose_of_lo_.rotationMatrix() * LIO_to_Fused.rotationMatrix(),
+                         fused_pose = SE3(Eigen::Quaterniond(pose_of_lo_.rotationMatrix() * LIO_to_Fused.rotationMatrix()).normalized(),
                                            pose_of_lo_.translation() + LIO_to_Fused.translation());
                          pub_pose_to_ros(laser_topic, fused_pose, meas.lidar_end_time_);
                }
@@ -583,7 +584,7 @@ namespace zjloc
                     // if (surf_num > options_.max_num_residuals)
                     //      break;
                }
-                         
+
                //   release
                // std::vector<Eigen::Vector3d>().swap(normalVec);
                std::vector<ceres::CostFunction *>().swap(surfFactor);
@@ -685,8 +686,8 @@ namespace zjloc
                }
 
                if (is_last_iteration || is_exit_condition_met) {
-                    // if (checkLocalizability(surf_keypoints, normalVec) == 1)                
-                    if (checkLocalizability(normalVec) == 1) 
+                    // if (checkLocalizability(surf_keypoints, normalVec) == 1)
+                    if (checkLocalizability(normalVec) == 1)
                     {
                       is_degenerate = true;
                       entered_degenerate = true;
@@ -711,7 +712,7 @@ namespace zjloc
                     }
                     prev_is_degenerate = is_degenerate;
                }
-               
+
                //release
                std::vector<Eigen::Vector3d>().swap(normalVec);
 
@@ -744,7 +745,7 @@ namespace zjloc
                     break;
                     // is_exit_condition_met = true;
                }
-          }     
+          }
 
           std::vector<point3D>().swap(surf_keypoints);
           if (options_.log_print)
@@ -759,10 +760,10 @@ namespace zjloc
 
      nav_msgs::Odometry lidarodom::getClosestOdom(double timestamp) {
           // std::lock_guard<std::mutex> lock(odoLock);
-      
+
           nav_msgs::Odometry closestOdom;
           double minTimeDiff = std::numeric_limits<double>::max();
-      
+
           // for (const auto& odom : odomQueue) {
           //     double timeDiff = std::abs(odom.header.stamp.toSec() - timestamp);
           //     if (timeDiff < minTimeDiff) {
@@ -774,17 +775,17 @@ namespace zjloc
           if (odomQueue.empty()) {
                throw std::runtime_error("odomQueue is empty");
           }
-       
+
           auto it = std::lower_bound(odomQueue.begin(), odomQueue.end(), timestamp,
                                       [](const nav_msgs::Odometry& odom, double time) {
                                           return odom.header.stamp.toSec() < time;
                                       });
-       
+
           if (it == odomQueue.end()) {
-               closestOdom = odomQueue.back(); 
+               closestOdom = odomQueue.back();
           }
           if (it == odomQueue.begin()) {
-               closestOdom = odomQueue.front(); 
+               closestOdom = odomQueue.front();
           }else {
                auto prev_it = std::prev(it);
                if (std::abs(prev_it->header.stamp.toSec() - timestamp) <
@@ -802,24 +803,24 @@ namespace zjloc
 
           Eigen::Vector3d axis = g_imu.cross(g_odom).normalized();
           double angle = acos(g_imu.dot(g_odom) / (g_imu.norm() * g_odom.norm()));
-      
+
           Eigen::AngleAxisd rotation_vector(angle, axis);
           return rotation_vector.toRotationMatrix();
      }
 
      double lidarodom::checkLocalizability(std::vector<Eigen::Vector3d> planeNormals)
      {
-          static bool permanently_degenerate = false; 
+          static bool permanently_degenerate = false;
 
           if (permanently_degenerate)
           {
              return 1;
           }
-          
+
           Eigen::MatrixXd mat;
           static int stable_degenerate_count = 0;
-          static int stable_exit_degenerate_count = 0; 
-          
+          static int stable_exit_degenerate_count = 0;
+
           if (planeNormals.size() > 10)
           {
                mat.setZero(planeNormals.size(), 3);
@@ -837,16 +838,14 @@ namespace zjloc
 
                // if (svd.singularValues().z() < 10)
                // if (degeneracyIndex > 0.9 ){
-               //    std::cout << ANSI_COLOR_YELLOW << "Low convincing result -> singular values:"
+               // std::cout << ANSI_COLOR_YELLOW << "Low convincing result -> singular values:"
                //                << svd.singularValues().x() << ", " << svd.singularValues().y() << ", "
-               //                << svd.singularValues().z() << ANSI_COLOR_RESET << std::endl;  
+               //                << svd.singularValues().z() << ANSI_COLOR_RESET << std::endl;
                // }
-               // if (SparseIndex < 10 || degeneracyIndex > 0.90){ //mid360 1.5 - 3.55  //0.45 
- 
-               if (SparseIndex < 10 || svd.singularValues().z() < 7 ){         
-               // if (SparseIndex < 10 ){
+               // if (SparseIndex < 10 || degeneracyIndex > 0.90){ //mid360 1.5 - 3.55  //0.45
+
+               if (SparseIndex < 10 || svd.singularValues().z() < 7 ){  //nomal
                // if (svd.singularValues().z() < 4){  //avia
-               // if (SparseIndex < 10){   
                     // std::cout << ANSI_COLOR_YELLOW << "Low convincing result -> singular values:"
                     //           << svd.singularValues().x() << ", " << svd.singularValues().y() << ", "
                     //           << svd.singularValues().z() << ANSI_COLOR_RESET << std::endl;
@@ -1068,7 +1067,7 @@ namespace zjloc
          }
 
          keypoints = std::move(valid_keypoints);
-         
+
     }
 
      ///  ===================  for search neighbor  ===================================================
@@ -1100,7 +1099,7 @@ namespace zjloc
 
           priority_queue_t priority_queue;
 
-          int max_iterations = 200; 
+          int max_iterations = 200;
           int iteration_count = 0;
 
           voxel voxel_temp(kx, ky, kz);
@@ -1114,7 +1113,7 @@ namespace zjloc
                          {
                             std::cerr << "Warning: Exceeded maximum iterations, exiting loop." << std::endl;
                             is_degenerate = true;
-                            goto exit_loops; 
+                            goto exit_loops;
                          }
                          voxel_temp.x = kxx;
                          voxel_temp.y = kyy;
@@ -1225,7 +1224,7 @@ namespace zjloc
           // cloudTemp.intensity = 50 * (point.z() - p_frame->p_state->translation.z());
           pcl_points->points.push_back(cloudTemp);
      }
-     
+
 
      void lidarodom::map_incremental(cloudFrame *p_frame, int min_num_points)
      {
@@ -1349,23 +1348,23 @@ namespace zjloc
 
           return p_frame;
      }
-     
+
      void lidarodom::stateInitialization()
      {
           // Eigen::Matrix3d R_align = computeGravityAlignment(g_odom, g_imu);
 
           if (index_frame < 2) //   only first frame 2 //50-3.53
           {
-               if (!odomQueue.empty()){        
+               if (!odomQueue.empty()){
                     if(!odomQueue.front().header.stamp.toSec() > time_begin){
                          auto it = std::lower_bound(
                                         odomQueue.begin(), odomQueue.end(), time_begin,
                                         [](const nav_msgs::Odometry &odom, double time) {
                                         return odom.header.stamp.toSec() < time;});
-                    
+
                          if (it != odomQueue.end()) {
                               startOdomMsg = *it;
-                       
+
                               tf::Quaternion orientation;
                               tf::quaternionMsgToTF(startOdomMsg.pose.pose.orientation, orientation);
                               double roll, pitch, yaw;
@@ -1376,8 +1375,8 @@ namespace zjloc
                                                    startOdomMsg.pose.pose.position.x,
                                                    startOdomMsg.pose.pose.position.y,
                                                    startOdomMsg.pose.pose.position.z);
-                              
-                              current_state->rotation_begin = Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix());
+
+                              current_state->rotation_begin = Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()).normalized();
                               current_state->translation_begin = R_align * odom_trans;
                          }
                     }
@@ -1397,8 +1396,8 @@ namespace zjloc
                                     endOdomMsg.pose.pose.position.x,
                                     endOdomMsg.pose.pose.position.y,
                                     endOdomMsg.pose.pose.position.z);
-                         
-                            current_state->rotation = Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix());
+
+                            current_state->rotation = Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()).normalized();
                             current_state->translation = R_align * odom_trans;
                          }
                     }
@@ -1406,7 +1405,7 @@ namespace zjloc
                          current_state->rotation_begin = Eigen::Quaterniond(imu_states_.front().R_.matrix());
                          current_state->translation_begin = imu_states_.front().p_;
                          current_state->rotation = Eigen::Quaterniond(imu_states_.back().R_.matrix());
-                         current_state->translation = imu_states_.back().p_; 
+                         current_state->translation = imu_states_.back().p_;
                     }
                }
                else{
@@ -1444,7 +1443,7 @@ namespace zjloc
 
                // if (imu_buffer_.back()->timestamp_ - time_curr < delay_time_)
                //      return measurements;
-               
+
                if (imu_buffer_.empty() || lidar_buffer_.empty() || img_buffer_.empty())
                     return measurements;
 
@@ -1453,7 +1452,7 @@ namespace zjloc
 
                if (imu_buffer_.back()->timestamp_ < img_time_buffer_.front())
                     return measurements;
-               
+
                auto curr_lidar = lidar_buffer_.front();
                auto lidar = last_lidar_;
                lidar.reserve(lidar.size() + curr_lidar.size());
@@ -1480,23 +1479,23 @@ namespace zjloc
                     img_buffer_.pop_front();
                     img_time_buffer_.pop_front();
                }
-               
+
                if (times.empty())
                {
                     last_lidar_ = lidar;
                     return measurements;
                }
 
-               
+
                std::vector<std::vector<point3D>> points;
                std::vector<std::deque<IMUPtr>> imus;
 
-               size_t p = 0; 
+               size_t p = 0;
                // double left = begin_time;
                for (size_t k = 0; k < times.size(); ++k)
                {
                     double right = times[k];
-                    
+
                     size_t p_left = p;
                     while (p < lidar.size() && lidar[p].timestamp <= right)
                          ++p;
@@ -1504,11 +1503,11 @@ namespace zjloc
                     // left = right;
                }
 
-               
+
                last_lidar_.clear();
                last_lidar_.insert(last_lidar_.end(), lidar.begin() + p, lidar.end());
 
-               
+
                double prev_time = begin_time;
                for (size_t k = 0; k < times.size(); ++k) {
                     double curr_time = times[k];
@@ -1525,10 +1524,10 @@ namespace zjloc
                     prev_time = curr_time;
                }
 
-               
+
                for (size_t k = 0; k < times.size(); ++k)
                {
-                    
+
                     MeasureGroup meas;
                     meas.lidar_ = points[k];
                     meas.lidar_begin_time_ = k == 0 ? begin_time : times[k-1];
@@ -1538,7 +1537,7 @@ namespace zjloc
                     measurements.emplace_back(meas);
                }
                time_curr = end_time;
-          
+
           }
      }
 
@@ -1546,7 +1545,7 @@ namespace zjloc
      {
           imu_states_.emplace_back(eskf_.GetNominalState());
 
-          
+
           double time_current = measures_.lidar_end_time_;
           Vec3d last_gyr, last_acc;
           for (auto &imu : measures_.imu_)
@@ -1579,11 +1578,11 @@ namespace zjloc
      void lidarodom::Undistort(std::vector<point3D> &points)
      {
           // auto &cloud = measures_.lidar_;
-          auto imu_state = eskf_.GetNominalState(); 
+          auto imu_state = eskf_.GetNominalState();
           // std::cout << __FUNCTION__ << ", " << imu_state.timestamp_ << std::endl;
           SE3 T_end = SE3(imu_state.R_, imu_state.p_);
 
-          
+
           for (auto &pt : points)
           {
                SE3 Ti = T_end;
@@ -1607,9 +1606,57 @@ namespace zjloc
                imu_init_.AddIMU(*imu);
           }
 
+          // 检查IMU噪声是否导致退化
+          if (imu_init_.IsIMUNoiseDegenerate())
+          {
+               LOG(ERROR) << "IMU噪声过大，无法初始化，切换使用VIO初始化";
+
+               // 使用VIO初始化状态
+               if (!odomQueue.empty())
+               {
+                    // 获取当前时刻最近的odom数据
+                    nav_msgs::Odometry initOdom = getClosestOdom(measures_.lidar_end_time_);
+
+                    tf::Quaternion orientation;
+                    tf::quaternionMsgToTF(initOdom.pose.pose.orientation, orientation);
+                    Eigen::Quaterniond odom_quat(orientation.w(), orientation.x(), orientation.y(), orientation.z());
+                    Eigen::Vector3d odom_trans(
+                         initOdom.pose.pose.position.x,
+                         initOdom.pose.pose.position.y,
+                         initOdom.pose.pose.position.z
+                    );
+
+                    // 设置初始状态为VIO提供的状态
+                    current_state->rotation_begin = Eigen::Quaterniond(R_align * odom_quat.toRotationMatrix()).normalized();
+                    current_state->translation_begin = R_align * odom_trans;
+                    current_state->rotation = current_state->rotation_begin;
+                    current_state->translation = current_state->translation_begin;
+
+                    // 使用默认的零偏和重力初始化ESKF
+                    zjloc::ESKFD::Options options;
+                    Vec3d zero_bias = Vec3d::Zero();
+                    Vec3d default_gravity(0, 0, -9.81);
+                    eskf_.SetInitialConditions(options, zero_bias, zero_bias, default_gravity);
+
+                    imu_need_init_ = false;
+                    is_degenerate = true;
+                    entered_degenerate = true;
+                    first_is_degenerate = true;
+                    has_entered_degenerate = true;
+
+                    LOG(WARNING) << "使用VIO初始化成功，系统标记为退化模式";
+                    std::cout << ANSI_COLOR_YELLOW << "VIO init (IMU degenerate)" << ANSI_COLOR_RESET << std::endl;
+               }
+               else
+               {
+                    LOG(ERROR) << "VIO数据不可用，初始化失败";
+               }
+               return;
+          }
+
           if (imu_init_.InitSuccess())
           {
-               
+
                zjloc::ESKFD::Options options;
                // options.gyro_var_ = sqrt(imu_init_.GetCovGyro()[0]);
                // options.acce_var_ = sqrt(imu_init_.GetCovAcce()[0]);
@@ -1622,5 +1669,5 @@ namespace zjloc
           }
      }
 
-     
+
 }
