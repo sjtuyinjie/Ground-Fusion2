@@ -44,7 +44,7 @@ mapping:
     #                0, 1, 0,
     #                0, 0, 1]
     # camera2imu
-    extrinsic_T: [ 0.00000000, 0.0000000, 0.0000000000 ]
+    extrinsic_T: [ 0.00000000, 0.0000000, 0.0000000000 ] 
     extrinsic_R: [ 0.0000000000, 0.0000000000, 1.0000000000,
                     -1.0000000000, 0.0000000000, 0.0000000000,
                     0.0000000000, -1.0000000000, 0.0000000000 ]
@@ -70,7 +70,7 @@ voxel:
     max_layer: 2
     max_points_size: 100
     layer_init_size: [5,5,5,5,5]
-
+        
 publish:
     path_en:  false
     scan_publish_en:  true       # false: close all the point cloud output
@@ -81,7 +81,7 @@ publish:
 pcd_save:
     pcd_save_en: false
     type: 0                      # 0 - World Frame, 1 - Body Frame;
-    interval: -1                  # how many LiDAR frames saved in each pcd file;
+    interval: -1                  # how many LiDAR frames saved in each pcd file; 
                                  # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
 
 image_save:
@@ -96,3 +96,6 @@ meshing:
     region_size: 10.0               # Size of region
     number_of_pts_append_to_map: 10000  # Number of pts appending to map (per-frame)
     if_draw_mesh: 1
+
+
+    

@@ -14,11 +14,11 @@ use_mcc: 0  #wheel-aided mcc.  do not use when wheel slip severel y, like loop2
 plane: 0
 use_yolo: 0  #only support mono version
 num_of_cam: 1
-equalize: 0
+equalize: 0      
 depth_threshold: 20  #  7 for parking1  2 for others
 
 imu_topic: "/alphasense/imu"
-wheel_topic: "/odom"
+wheel_topic: "/odom"  
 image0_topic: "/alphasense/cam0/image_raw"
 image1_topic: "/camera_left/depth"
 output_path: "/home/car/Downloads/newproject9/groundfusion_ws/src/Ground-Fusion/z_output/m2dgrp/"
@@ -27,7 +27,7 @@ cam0_calib: "cam_HILTI22.yaml"
 cam1_calib: "m4dgr_cam.yaml"
 image_width: 720
 image_height: 540
-
+   
 #gnss part
 
 gnss_meas_topic: "/ublox_driver/range_meas"           # GNSS raw measurement topic
@@ -75,7 +75,7 @@ body_T_cam0: !!opencv-matrix
    dt: d
 
    data: [ 0.00670802, 0.999926, -0.0101073, -0.045864179096,
-           0.00242564, 0.0100912, 0.999946, 0.012631758005,
+           0.00242564, 0.0100912, 0.999946, 0.012631758005, 
            0.999975, -0.00673218, -0.00235777, -0.050987853707,
            0.0000000000, 0.0000000000, 0.0000000000, 1.0000000000]
 
@@ -127,8 +127,8 @@ multiple_thread: 1
 
 #feature traker paprameters
 max_cnt: 150            # max feature number in feature tracking
-min_dist: 30            # min distance between two features
-freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image
+min_dist: 30            # min distance between two features 
+freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
 F_threshold: 1.0        # ransac threshold (pixel)
 show_track: 1           # publish tracking image as topic
 flow_back: 1            # perform forward and backward optical flow to improve feature tracking accuracy
@@ -165,7 +165,7 @@ td_wheel: 0.0                             # initial value of time offset. unit: 
 #loop closure parameters
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 pose_graph_save_path: "//home/car/Downloads/newproject/vinsrgbdfusion_ws/src/VINS-Fusion-RGBD/z_posegraph/" # save and load path
-save_image: 0                   # save image in pose graph for visualization prupose; you can close this function by setting 0
+save_image: 0                   # save image in pose graph for visualization prupose; you can close this function by setting 0 
 
 # depth below
 load_grid_map: 0

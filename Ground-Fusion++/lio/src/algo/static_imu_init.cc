@@ -13,7 +13,7 @@ namespace zjloc
     bool StaticIMUInit::AddIMU(const IMU &imu)
     {
 
-        // std::cout << "进入初始化" << std::endl;
+        // std::cout << "进入初始化" << std::endl;  
 
         if (init_success_)
         {
@@ -102,7 +102,7 @@ namespace zjloc
         {
             LOG(ERROR) << "陀螺仪测量噪声太大" << cov_gyro_.norm() << " > " << options_.max_static_gyro_var;
             consecutive_high_noise_count_++;
-
+            
             // 连续3帧噪声过大,视为退化
             if (consecutive_high_noise_count_ >= 3)
             {
@@ -116,7 +116,7 @@ namespace zjloc
         {
             LOG(ERROR) << "加计测量噪声太大" << cov_acce_.norm() << " > " << options_.max_static_acce_var;
             consecutive_high_noise_count_++;
-
+            
             // 连续3帧噪声过大,视为退化
             if (consecutive_high_noise_count_ >= 3)
             {
@@ -125,7 +125,7 @@ namespace zjloc
             }
             return false;
         }
-
+        
         // 噪声正常，重置计数器和退化标志
         consecutive_high_noise_count_ = 0;
         imu_noise_degenerate_ = false;

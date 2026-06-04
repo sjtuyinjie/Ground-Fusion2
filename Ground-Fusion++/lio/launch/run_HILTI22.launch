@@ -25,7 +25,7 @@
   </group>
 
   <!-- <include file="$(find im_mesh)/launch/mapping_HILTI22.launch">
-    <arg name="rviz" value="false" />
+    <arg name="rviz" value="false" />  
   </include> -->
 
 <!-- <node pkg="tf" type="static_transform_publisher" name="word2map_tf"  args="0 0 0 0 0 0 /world /map 10" />

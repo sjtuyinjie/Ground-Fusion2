@@ -24,7 +24,7 @@
   </group>
 
   <!-- <include file="$(find im_mesh)/launch/mapping_m2dgrp.launch">
-    <arg name="rviz" value="false" />
+    <arg name="rviz" value="false" /> 
   </include> -->
 
   <!-- <include file="$(find imu_transformer)/launch/ned_to_enu.launch" /> -->

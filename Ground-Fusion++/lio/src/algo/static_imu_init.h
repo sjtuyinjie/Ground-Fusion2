@@ -76,11 +76,11 @@ namespace zjloc
         std::deque<IMU> init_imu_deque_; // 初始化用的数据
         double current_time_ = 0.0;      // 当前时间
         double init_start_time_ = 0.0;   // 静止的初始时间
-
+        
         // IMU噪声退化检测相关
         int consecutive_high_noise_count_ = 0;  // 连续噪声过大计数器
         bool imu_noise_degenerate_ = false;     // IMU噪声退化标志
-
+        
         // 运行时噪声检测（初始化完成后使用）
         std::deque<IMU> runtime_imu_deque_;
         int runtime_high_noise_count_ = 0;
