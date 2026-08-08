@@ -273,8 +273,15 @@ rosrun rviz rviz -d $(rospack find groundfusion2)/launch/rviz.rviz
 
 ## 7. Star History ⭐️
 
-[![Star History Chart](https://api.star-history.com/svg?repos=sjtuyinjie/Ground-Fusion2&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)
 
+
+<a href="https://www.star-history.com/?repos=sjtuyinjie%2FGround-Fusion2&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=sjtuyinjie/Ground-Fusion2&type=date&theme=dark&legend=top-left&sealed_token=EnBGj5FsftG7KdSbko5zKAEPObU9_gCpoxGWa-KeekLNae7nl2xTiueEgq357MuSN4xuXWFQd2VBY0dzDZIQLwR4dqVzyfzt5CxqQMoW0TV-rwvKohdNsrbPRMm6CgoSjBf3UafA4K6ERrq4Q3sW85hWCTveJq17m2gFG379u-QipTuuhHEqGaEEx6D2" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=sjtuyinjie/Ground-Fusion2&type=date&legend=top-left&sealed_token=EnBGj5FsftG7KdSbko5zKAEPObU9_gCpoxGWa-KeekLNae7nl2xTiueEgq357MuSN4xuXWFQd2VBY0dzDZIQLwR4dqVzyfzt5CxqQMoW0TV-rwvKohdNsrbPRMm6CgoSjBf3UafA4K6ERrq4Q3sW85hWCTveJq17m2gFG379u-QipTuuhHEqGaEEx6D2" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=sjtuyinjie/Ground-Fusion2&type=date&legend=top-left&sealed_token=EnBGj5FsftG7KdSbko5zKAEPObU9_gCpoxGWa-KeekLNae7nl2xTiueEgq357MuSN4xuXWFQd2VBY0dzDZIQLwR4dqVzyfzt5CxqQMoW0TV-rwvKohdNsrbPRMm6CgoSjBf3UafA4K6ERrq4Q3sW85hWCTveJq17m2gFG379u-QipTuuhHEqGaEEx6D2" />
+ </picture>
+</a>
 
 ## 8. Contributing 👷‍♂️
 
